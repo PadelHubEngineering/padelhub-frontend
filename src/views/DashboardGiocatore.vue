@@ -1,7 +1,3 @@
-<template>
-    <h3>Welcome Giocatore {{ getUsername() }}</h3>
-</template>
-
 <script lang="ts">
     export default {
         name: 'DashboardGiocatore',
@@ -15,3 +11,12 @@
         }
     }
 </script>
+
+
+<template>
+    <h3>Welcome Giocatore {{ getUsername() }}</h3>
+</template>
+
+
+
+
