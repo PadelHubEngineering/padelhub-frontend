@@ -19,50 +19,32 @@ export default {
     methods:{
         login(){
 
-            this.output = "Mando i dati al backend"
             const axios: Axios | undefined = this.$axios as Axios;
             if( !axios ) return 
 
             axios.post(
-                "http://192.168.43.231:9090/api/v1/authentication", 
+                "http://192.168.1.18:9090/api/v1/authentication", 
                 this.input
             ).then( response => {
-                console.log(response)
+
+                //console.log(response)
 
                 const { success, message, token, dati } = response.data;
                 const { email, nome, tipoAccount } = dati;
 
-                console.log(nome)
+                //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
+                this.$store.commit(`auth/setAuthenticated`, success)
+                this.$store.commit(`auth/setEmail`, email)
+                this.$store.commit(`auth/setNome`, nome)
+                this.$store.commit(`auth/setTipoAccount`, tipoAccount)
+                this.$store.commit(`auth/setToken`, token)
 
-                this.$store.commit(
-                    `auth/setToken`,
-                    { 
-                        authenticated: success,
-                        email: email,
-                        nome,
-                        tipoAccount,
-                        token
-                    }
-                );
+                //console.log(this.$store.state.auth)
 
-                console.log(this.$store.state.auth)
+                this.$router.push('/dashboard')
 
-//                this.$router.push('/dashboard')
+            }).catch (err => console.log(err))
 
-            })
-
-
-            // if(this.input.password != ""){
-            //     console.log("Autenticato")
-            //     this.$store.commit(`auth/setAuthenticated`, true);
-            //     this.$store.commit(`auth/setUsername`, this.input.email);
-            //     this.output = "Autenticato con successo"
-            //     console.log(this.$store.state.auth.username)
-            //     this.$router.push('/dashboard')
-            // } else {
-            //     this.$store.commit(`auth/setAuthenticated`, false);
-            //     this.output = ""
-            // }
         },
 
         validateEmail(){
