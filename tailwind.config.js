@@ -13,7 +13,8 @@ module.exports = {
     colors: {
       bluPadelHub: 'rgb(47, 141, 206)',
       white: 'rgb(255, 255, 255)',
-      bluPadelHubHover: 'rgb(32, 111, 166)'
+      bluPadelHubHover: 'rgb(32, 111, 166)',
+      invalidForm: 'rgb(236, 72, 153)'
     }
   },
   plugins: [],
