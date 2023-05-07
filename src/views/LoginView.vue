@@ -41,7 +41,13 @@ export default {
 
                 //console.log(this.$store.state.auth)
 
-                this.$router.push('/dashboard')
+                if(tipoAccount == 0){ //E' un giocatore
+                    this.$router.push('/dashGiocatore')
+                } 
+                else if(tipoAccount == 1) { //E' un circolo
+                    this.$router.push('/dashCircolo')
+                }
+                
 
             }).catch (err => console.log(err))
 
