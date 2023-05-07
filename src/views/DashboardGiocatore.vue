@@ -6,7 +6,7 @@
         },
         methods: {
             getUsername(): string {
-                return this.$store.state.auth.username;
+                return this.$store.state.auth.nome;
             }
         }
     }

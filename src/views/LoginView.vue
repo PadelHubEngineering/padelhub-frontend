@@ -1,5 +1,9 @@
 <script lang="ts">
 
+import type { TipoAccount } from '@/store/auth';
+import { Axios } from 'axios';
+import { inject } from 'vue'; 
+
 export default {
     name: 'LoginView',
     data(){
@@ -11,10 +15,43 @@ export default {
             output: "",
         }
     },
+    inject: ['$axios'],
     methods:{
         login(){
 
             this.output = "Mando i dati al backend"
+            const axios: Axios | undefined = this.$axios as Axios;
+            if( !axios ) return 
+
+            axios.post(
+                "http://192.168.43.231:9090/api/v1/authentication", 
+                this.input
+            ).then( response => {
+                console.log(response)
+
+                const { success, message, token, dati } = response.data;
+                const { email, nome, tipoAccount } = dati;
+
+                console.log(nome)
+
+                this.$store.commit(
+                    `auth/setToken`,
+                    { 
+                        authenticated: success,
+                        email: email,
+                        nome,
+                        tipoAccount,
+                        token
+                    }
+                );
+
+                console.log(this.$store.state.auth)
+
+//                this.$router.push('/dashboard')
+
+            })
+
+
             // if(this.input.password != ""){
             //     console.log("Autenticato")
             //     this.$store.commit(`auth/setAuthenticated`, true);
@@ -49,19 +86,23 @@ export default {
 </script>
 
 <template>
-    <form name="login-form" >
-        <div>
-            <label for="email">Email: </label>
-            <input id="email" type="text" v-model="input.email" v-on:focusout="validateEmail" required />
-        </div>
-        <div>
-            <label for="password">Password: </label>
-            <input id="password" type="password" v-model="input.password"  v-on:focusout="validatePassword" required/>
-        </div>
-        <button type="submit" v-on:click.prevent = "login()">Login</button>
-    </form>
-
-    <p>{{ output }}</p>  
+    <div >
+        <form name="login-form" class="justify-center" flex flex-col items-center justify-center >
+            <div>
+                <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
+                <input id="email" type="text" v-model="input.email" v-on:focusout="validateEmail" required class=" placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email"/>
+            </div>
+            <br>
+            <div>
+                <label for="password" class="font-bold text-bluPadelHub">Password</label>
+                <input id="password" type="password" v-model="input.password"  v-on:focusout="validatePassword" class="border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic" required placeholder="********">
+            </div>
+            <br><br>
+            <button class="shadow bg-bluPadelHub hover:bg-bluPadelHubHover text-white font-bold py-3 w-full rounded-[12px]" type="submit" v-on:click.prevent = "login()">Login</button>
+        </form>
+        <br>
+        <p>{{ output }}</p>  
+    </div>
 
 </template>
 

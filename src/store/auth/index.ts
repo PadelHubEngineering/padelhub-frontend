@@ -3,7 +3,17 @@ import mutations from "./mutations"
 
 export type State = {
     authenticated: boolean,
-    username: string
+    email: string
+    nome: string
+    tipoAccount: TipoAccount | null
+    token: string
+}
+
+export enum TipoAccount {
+    Gicocatore,
+    Circolo,
+    OperatoreCustomerService,
+    Ammininstratore
 }
 
 export default {
@@ -11,7 +21,10 @@ export default {
     state() {
         return {
             authenticated: false,
-            username: ""
+            email: "",
+            nome: "",
+            tipoAccount: null,
+            token: ""
         } as State
     }, 
     mutations,

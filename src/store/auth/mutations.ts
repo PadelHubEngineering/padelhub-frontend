@@ -1,10 +1,7 @@
-import type { State } from ".";
+import type { State, TipoAccount } from ".";
 
 export default {
-    setAuthenticated(state: State, authenticated: any) {
-        state.authenticated = authenticated
-    },
-    setUsername(state: State, username: any) {
-        state.username = username
+    setToken(state:State, new_state: State ){
+        state = new_state
     }
 }
