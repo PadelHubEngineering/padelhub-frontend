@@ -89,11 +89,8 @@ export default {
       if (!axios) return
 
       axios.post(
-        "http://192.168.1.18:9090/api/v1/authentication",
-        {
-          email: this.email,
-          password: this.password
-        }
+        `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
+        this.input
       ).then(response => {
 
         //console.log(response)
