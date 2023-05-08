@@ -6,14 +6,14 @@
       <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
       <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
         class="invalid:border-invalidForm  invalid:text-invalidForm 
-         focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+           focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         v-model="email" required> <br>
       <span v-if="msg.email" class="italic text-xs">{{ msg.email }}</span>
       <br>
       <label for="password" class="font-bold text-bluPadelHub">Password</label>
       <input type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
         class="border-bluPadelHub invalid:border-invalidForm  invalid:text-invalidForm 
-         focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
+           focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
         v-model="password" required><br>
       <span v-if="msg.password" class="italic text-xs">{{ msg.password }}</span>
       <br>
@@ -32,6 +32,7 @@
 import type { TipoAccount } from '@/store/auth';
 import { Axios } from 'axios';
 import { createApp, inject } from 'vue';
+
 
 export default {
   name: 'LoginView',
@@ -85,9 +86,11 @@ export default {
 
       const axios: Axios | undefined = this.$axios as Axios;
       if (!axios) return
-
+      if (!import.meta.env.VITE_BACK_URL) {
+        return "Error, Backend URL not set in .env file";
+      }
       axios.post(
-        "http://192.168.1.18:9090/api/v1/authentication",
+        `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
         this.input
       ).then(response => {
 

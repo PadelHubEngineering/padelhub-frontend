@@ -6,6 +6,8 @@ import router from './router'
 import store from './store'
 import axios from 'axios';
 
+
+console.log(import.meta.env.VITE_BACK_URL)
 const app = createApp(App)
 app.provide('$axios', axios);
 
