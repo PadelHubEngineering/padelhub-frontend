@@ -11,7 +11,7 @@
       <span v-if="msg.email" class="italic text-xs">{{ msg.email }}</span>
       <br>
       <label for="password" class="font-bold text-bluPadelHub">Password</label>
-      <input type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+      <input type="password" pattern="[A-Za-z\d@$!%*?&]{1,30}"
         class="border-bluPadelHub invalid:border-invalidForm  invalid:text-invalidForm 
          focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
         v-model="password" required><br>
@@ -30,7 +30,7 @@
 <script lang="ts">
 
 import type { TipoAccount } from '@/store/auth';
-import { Axios } from 'axios';
+import axios from 'axios';
 import { createApp, inject } from 'vue';
 
 export default {
@@ -60,35 +60,40 @@ export default {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) { //Se rispetta il form
         this.msg['email'] = '';
         this.disabled = [false, this.disabled[1]]
-        console.log("email false")
       } else {
         this.msg['email'] = 'Email non valida';
         this.disabled = [true, this.disabled[1]]
-        console.log("email true")
       }
+
     },
     validatePassword(value: any) {
-      if (value.length >= 7) {
+
+      if (/[A-Za-z\d@$!%*?&]{1,30}/.test(value)) { //Se rispetta il regex 
         this.msg['password'] = '';
-        this.disabled = [this.disabled[1], false]
+        this.disabled = [this.disabled[0], false]
+        console.log("pass true")
 
       } else {
-        this.msg['password'] = 'Almeno 8 caratteri, almeno una lettera maiuscola, almeno una lettera minuscolo, un numero e un carattere speciale [@$!%*?&]';
-        this.disabled = [this.disabled[1], true]
-
+        this.msg['password'] = 'Password non valida';
+        this.disabled = [this.disabled[0], true]
+        console.log("pass false")
       }
+
     },
     handleSubmission() {
       alert(`Email: ${this.email} Password: ${this.password}`)
     },
     login() {
 
-      const axios: Axios | undefined = this.$axios as Axios;
+      //const axios: Axios | undefined = this.$axios as Axios;
       if (!axios) return
 
       axios.post(
         "http://192.168.1.18:9090/api/v1/authentication",
-        this.input
+        {
+          email: this.email,
+          password: this.password
+        }
       ).then(response => {
 
         //console.log(response)
