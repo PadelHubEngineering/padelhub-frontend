@@ -1,6 +1,6 @@
 <template>
   <div id="visa">
-    <h1 class="text-bluPadelHub font-bold text-lg">Login</h1>
+    <h1 class="text-bluPadelHub font-bold text-xl text-center">Login</h1>
     <br><br>
     <form @submit.prevent="handleSubmission" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
@@ -17,7 +17,8 @@
         v-model="password" required><br>
       <span v-if="msg.password" class="italic text-xs">{{ msg.password }}</span>
       <br>
-      <br>
+      <span v-if="msg.error" class="text-invalidForm">{{ msg.error }}</span>
+      <br><br>
       <input
         class="shadow bg-bluPadelHub enabled:hover:bg-bluPadelHubHover text-white font-bold py-3 w-full rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
         type="submit" :disabled="!disabled.every((i: any) => i === false)" v-on:click.prevent="login()" />
@@ -43,7 +44,8 @@ export default {
       disabled: [true, true],
       msg: {
         email: '',
-        password: ''
+        password: '',
+        error: ''
       },
     }
   },
@@ -94,11 +96,12 @@ export default {
          }
       ).then(response => {
 
-        //console.log(response)
+        console.log(response)
 
         const { success, message, token, dati } = response.data;
         const { email, nome, tipoAccount } = dati;
 
+      
         //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
         this.$store.commit(`auth/setAuthenticated`, success)
         this.$store.commit(`auth/setEmail`, email)
@@ -106,9 +109,7 @@ export default {
         this.$store.commit(`auth/setTipoAccount`, tipoAccount)
         this.$store.commit(`auth/setToken`, token)
 
-        //console.log(this.$store.state.auth)
 
-        this.$router.push('/dashboard')
         if (tipoAccount == 0) { //E' un giocatore
           this.$router.push('/dashGiocatore')
         }
@@ -117,7 +118,10 @@ export default {
         }
 
 
-      }).catch(err => console.log(err))
+      }).catch( err => {
+        const { message } = err.response.data;
+        this.msg['error'] = message
+      })
 
     },
   }
