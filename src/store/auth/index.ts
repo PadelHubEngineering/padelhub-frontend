@@ -1,13 +1,8 @@
+import type { State } from "vue"
 import getters from "./getters"
 import mutations from "./mutations"
 
-export type State = {
-    authenticated: boolean,
-    email: string
-    nome: string
-    tipoAccount: TipoAccount | null
-    token: string
-}
+
 
 export enum TipoAccount {
     Gicocatore,

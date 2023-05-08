@@ -4,7 +4,7 @@
     <br><br>
     <form @submit.prevent="handleSubmission" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
-      <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+      <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"    
         class="invalid:border-invalidForm  invalid:text-invalidForm 
          focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         v-model="email" required> <br>
@@ -68,15 +68,13 @@ export default {
     },
     validatePassword(value: any) {
 
-      if (/[A-Za-z\d@$!%*?&]{1,30}/.test(value)) { //Se rispetta il regex 
+      if (/^[[A-Za-z\d@$!%*?&]{1,30}$/.test(value)) { //Se rispetta il regex 
         this.msg['password'] = '';
         this.disabled = [this.disabled[0], false]
-        console.log("pass true")
 
       } else {
         this.msg['password'] = 'Password non valida';
         this.disabled = [this.disabled[0], true]
-        console.log("pass false")
       }
 
     },
@@ -90,7 +88,10 @@ export default {
 
       axios.post(
         `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
-        this.input
+         {
+          email: this.email,
+          password: this.password
+         }
       ).then(response => {
 
         //console.log(response)
@@ -125,6 +126,3 @@ export default {
 </script>
 
 
-
-
-//NOTA:: MANCA LA FUNZIONE DI LOGIN
