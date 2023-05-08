@@ -30,7 +30,7 @@
 
 <script lang="ts">
 
-import type { TipoAccount } from '@/store/auth';
+import { TipoAccount } from '@/store/auth';
 import axios from 'axios';
 import { createApp, inject } from 'vue';
 
@@ -110,10 +110,10 @@ export default {
         this.$store.commit(`auth/setToken`, token)
 
 
-        if (tipoAccount == 0) { //E' un giocatore
+        if (tipoAccount == TipoAccount.Gicocatore) { //E' un giocatore
           this.$router.push('/dashGiocatore')
         }
-        else if (tipoAccount == 1) { //E' un circolo
+        else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo
           this.$router.push('/dashCircolo')
         }
 
