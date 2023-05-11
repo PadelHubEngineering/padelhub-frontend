@@ -15,6 +15,9 @@ module.exports = {
       white: 'rgb(255, 255, 255)',
       bluPadelHubHover: 'rgb(32, 111, 166)',
       invalidForm: 'rgb(236, 72, 153)'
+    },
+    fontFamily: {
+      'circolo': '"KoHo", sans-serif'
     }
   },
   plugins: [],
