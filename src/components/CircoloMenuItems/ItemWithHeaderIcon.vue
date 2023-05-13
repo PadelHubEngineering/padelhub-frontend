@@ -32,7 +32,7 @@
                 href: String
             }>>
         },
-        components: [
+        component: [
             StructureIcon
         ]
     }

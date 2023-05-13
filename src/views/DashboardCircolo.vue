@@ -1,5 +1,9 @@
 <script setup lang="ts">
-    import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
+    import ItemSlot from "@/components/GestioneSlot/ItemSlot.vue";
+import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
+import SlotColumn from "@/components/GestioneSlot/SlotColumn.vue";
+import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
+
 </script>
 
 
@@ -11,23 +15,25 @@
 
         <div class="w-4/5">
             <h3>Welcome Circolo {{ getUsername() }}</h3>
+            <SlotGrid></SlotGrid>
         </div>
     </div>
 </template>
 
 <script lang="ts">
     export default {
-        name: 'DashboardCircolo',
-        data() {
-            return {}
-        },
-        methods: {
-            getUsername(): string {
-                return this.$store.state.auth.nome;
-            }
-        },
-        components: [
-            CircoloMenuComponent
-        ]
-    }
+    name: "DashboardCircolo",
+    data() {
+        return {};
+    },
+    methods: {
+        getUsername(): string {
+            return this.$store.state.auth.nome;
+        }
+    },
+    component: [
+        CircoloMenuComponent,
+        SlotGrid
+    ]
+}
 </script>
