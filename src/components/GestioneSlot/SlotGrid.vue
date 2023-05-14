@@ -10,13 +10,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in this.campiInterni">
-                <th scope="row">{{ item.id  }}</th>   
-                <td><ItemSlot :color=item.color></ItemSlot></td>
-                <td><ItemSlot :color=item.color></ItemSlot></td>
-                <td><ItemSlot :color=item.color></ItemSlot></td>
-                <td><ItemSlot :color=item.color></ItemSlot></td> 
-                <!-- <td>{{ item }}</td> -->
+            <tr v-for="campo in this.campiInterni.length">
+                <th scope="row">{{ this.campiInterni[campo-1].id }}</th>   
+                <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
+                <td v-for="i in (this.orari.length-1)"><ItemSlot :color=findColor(campo-1,i-1)></ItemSlot></td>
             </tr>
         </tbody>
     </table>
@@ -33,27 +30,54 @@ import ItemSlot, { Color } from './ItemSlot.vue';
     data() {
         return {
             oraApertura: new Date(1683961200000),
-            oraChiusura: new Date(1684009800000),
-            durataSlot: "1:30",
+            oraChiusura: new Date(1683990000000),
+            durataSlot: "1:00",
             orari: [''],
-            nSlot: 0,
             campiInterni: [
+
                 {
                     id: "CAMPO 1",
-                    color: Color.Green
+                    prenotazioni: [
+                        {
+                            nSlot: 7, 
+                            color: Color.Red
+                        }
+                    ]
                 },
+
                 {
                     id: "CAMPO 2",
-                    color: Color.Red
+                    prenotazioni: [
+                        {
+                            nSlot: 3, 
+                            color: Color.Red
+                        },
+                        {
+                            nSlot: 4, 
+                            color: Color.Yellow
+                        },
+                        {
+                            nSlot: 6, 
+                            color: Color.Red
+                        },
+                        {
+                            nSlot: 7, 
+                            color: Color.Yellow
+                        }
+                    ]
                 },
+
                 {
                     id: "CAMPO 3",
-                    color: Color.Yellow
-                },
-                {
-                    id: "CAMPO 4",
-                    color: Color.Green
+                    prenotazioni: [
+                        {
+                            nSlot: 6, 
+                            color: Color.Red
+                        }
+                    ]
                 }
+
+
             ],
             campiEsterni: [
                 {
@@ -72,7 +96,8 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                     id: "CAMPO 8",
                     color: Color.Green
                 }
-            ]
+            ],
+            counter: 0
         };
     },
     components: { ItemSlot },
@@ -90,18 +115,37 @@ import ItemSlot, { Color } from './ItemSlot.vue';
             var date = new Date(current)
             this.orari[0] = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
             current += millisecSlot
-            this.nSlot++
 
             while(current <= final){
                 date = new Date(current)
                 this.orari.push(date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
                 current += millisecSlot
-                this.nSlot++
             }
+
         }
+
     }, 
     mounted(){
         this.findFasceOrarie()
+    },
+    computed: {
+        findColor(){
+
+            return(campo:number, s:number) => {
+        
+                //Se è una nuova riga allora il counter torna a zero
+                if(s === 0) this.counter = 0
+
+                if(this.campiInterni[campo].prenotazioni[this.counter].nSlot === s+1){
+                    let position = this.counter
+                    if(this.counter < (this.campiInterni[campo].prenotazioni.length-1)) 
+                        this.counter++
+                    return this.campiInterni[campo].prenotazioni[position].color
+                } else {
+                    return Color.Green
+                }
+            }
+        }
     }
 }
 
