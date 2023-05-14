@@ -13,8 +13,7 @@ import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
             class='w-1/5'
         />
 
-        <div class="w-4/5">
-            <h3>Welcome Circolo {{ getUsername() }}</h3>
+        <div class="w-4/5 ml-10 mt-5">
             <SlotGrid></SlotGrid>
         </div>
     </div>

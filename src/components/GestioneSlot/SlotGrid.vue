@@ -1,19 +1,37 @@
 <template>
     
-    <p>Campi INTERNI</p>
-    <table class="table-fixed border-spacing-2">
+    <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI INTERNI</p><br>
+    <table class="table-fixed">
         <thead class="sticky top-0">
             <tr> 
                 <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
                 <th class=""></th>
-                <th v-for="i in (this.orari.length-1)" > {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+                <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="campo in this.campiInterni.length">
-                <th scope="row">{{ this.campiInterni[campo-1].id }}</th>   
+                <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiInterni[campo-1].id }}</th>   
                 <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
-                <td v-for="i in (this.orari.length-1)"><ItemSlot :color=findColor(campo-1,i-1)></ItemSlot></td>
+                <td v-for="i in (this.orari.length-1)" align="center"><ItemSlot :color=findColorInterni(campo-1,i-1)></ItemSlot></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br><br>
+
+    <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI ESTERNI</p><br>
+    <table class="table-fixed border-spacing-2">
+        <thead class="sticky top-0">
+            <tr> 
+                <th class=""></th>
+                <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="campo in this.campiEsterni.length">
+                <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiEsterni[campo-1].id }}</th>   
+                <td v-for="i in (this.orari.length-1)"><ItemSlot :color=findColorEsterni(campo-1,i-1)></ItemSlot></td>
             </tr>
         </tbody>
     </table>
@@ -80,21 +98,29 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
             ],
             campiEsterni: [
+            {
+                    id: "CAMPO 4",
+                    prenotazioni: [
+                        {
+                            nSlot: 2, 
+                            color: Color.Red
+                        },
+                        {
+                            nSlot: 3, 
+                            color: Color.Yellow
+                        }
+                    ]
+                },
+
                 {
                     id: "CAMPO 5",
-                    color: Color.Green
-                },
-                {
-                    id: "CAMPO 6",
-                    color: Color.Red
-                },
-                {
-                    id: "CAMPO 7",
-                    color: Color.Yellow
-                },
-                {
-                    id: "CAMPO 8",
-                    color: Color.Green
+                    prenotazioni: [
+                        {
+                            nSlot: 6, 
+                            color: Color.Red
+                        }
+            
+                    ]
                 }
             ],
             counter: 0
@@ -129,7 +155,7 @@ import ItemSlot, { Color } from './ItemSlot.vue';
         this.findFasceOrarie()
     },
     computed: {
-        findColor(){
+        findColorInterni(){
 
             return(campo:number, s:number) => {
         
@@ -145,10 +171,39 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                     return Color.Green
                 }
             }
-        }
+        },
+        findColorEsterni(){
+
+            return(campo:number, s:number) => {
+
+                //Se è una nuova riga allora il counter torna a zero
+                if(s === 0) this.counter = 0
+
+                if(this.campiEsterni[campo].prenotazioni[this.counter].nSlot === s+1){
+                    let position = this.counter
+                    if(this.counter < (this.campiEsterni[campo].prenotazioni.length-1)) 
+                        this.counter++
+                    return this.campiEsterni[campo].prenotazioni[position].color
+                } else {
+                    return Color.Green
+                }
+            }
+            }
     }
 }
 
 
 
 </script>
+
+
+<style>
+
+table {
+  border-collapse: separate;
+  border-spacing: 30px 10px;
+  width: 1300px;
+}
+
+
+</style>
