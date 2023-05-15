@@ -4,10 +4,15 @@
 
     let props = defineProps(['data_ora_slot', 'id_partita'])
 
+    var ora_inizio = ref("")
+    var ora_fine = ref("")
+
     const dialog = ref<HTMLDialogElement>()
     const buttonStyle = ref("rounded-2xl p-2 border-solid border-bluPadelHub border-2")
 
-    function openModal(id_partita: number) {
+    function openModal(start:string, end: string, id_partita: number) {
+        ora_inizio.value = start
+        ora_fine.value = end
         console.log("ok bello", id_partita)
         dialog.value?.showModal()
     }
@@ -54,7 +59,7 @@
             </h2>
 
             <p>
-                Stai per occupare lo slot <b>{{ data_ora_slot }}</b>
+                Stai per occupare lo slot <b>{{ ora_inizio }} - {{ ora_fine }}</b>
             </p>
             <p>
                 In questo modo nessuna partita potrà essere creata in questo slot

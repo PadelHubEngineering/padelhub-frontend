@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import ItemSlot from "@/components/GestioneSlot/ItemSlot.vue";
 import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
-import SlotColumn from "@/components/GestioneSlot/SlotColumn.vue";
 import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
+import ReservationModalVue from "@/components/riservaSlotCircolo/ReservationModal.vue";
 
 </script>
 
@@ -34,5 +34,6 @@ import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
         CircoloMenuComponent,
         SlotGrid
     ]
+    
 }
 </script>
