@@ -15,44 +15,43 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
                 {
                     id: "CAMPO 1",
-                    prenotazioni: [
-                        {
+                    prenotazioni: {
+                        7: {
                             nSlot: 7, 
                             color: Color.Red
                         }
-                    ]
+                    }
                 },
 
                 {
                     id: "CAMPO 2",
-                    prenotazioni: [
-                        {
+                    prenotazioni: {
+                        3: {
                             nSlot: 3, 
                             color: Color.Red
                         },
-                        {
+                        4: {
                             nSlot: 4, 
                             color: Color.Yellow
                         },
-                        {
+                        6: {
                             nSlot: 6, 
                             color: Color.Red
                         },
-                        {
+                        7: {
                             nSlot: 7, 
                             color: Color.Yellow
                         }
-                    ]
+                    },
                 },
-
                 {
                     id: "CAMPO 3",
-                    prenotazioni: [
-                        {
+                    prenotazioni: {
+                        6: {
                             nSlot: 6, 
                             color: Color.Red
                         }
-                    ]
+                    }
                 }
 
 
@@ -60,27 +59,27 @@ import ItemSlot, { Color } from './ItemSlot.vue';
             campiEsterni: [
             {
                     id: "CAMPO 4",
-                    prenotazioni: [
-                        {
+                    prenotazioni: {
+                        2: {
                             nSlot: 2, 
                             color: Color.Red
                         },
-                        {
+                        3: {
                             nSlot: 3, 
                             color: Color.Yellow
                         }
-                    ]
+                    }
                 },
 
                 {
                     id: "CAMPO 5",
-                    prenotazioni: [
-                        {
+                    prenotazioni: {
+                        6: {
                             nSlot: 6, 
                             color: Color.Red
                         }
             
-                    ]
+                    }
                 }
             ],
             counter: 0
@@ -107,50 +106,35 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                 current += millisecSlot
             }
         },
-        showModal(value:number){
-            this.$refs.modale.openModal(this.orari[value], this.orari[value+1])
+        showModal(value:number, color: Color){
+            this.$refs.modale.openModal(this.orari[value], this.orari[value+1], color)
             //console.log(this.orari[value] + " - " + this.orari[value+1])
         }
 
-    }, 
+    },
     mounted(){
         this.findFasceOrarie()
     },
     computed: {
         findColorInterni(){
 
-            return(campo:number, s:number) => {
-        
-                //Se è una nuova riga allora il counter torna a zero
-                if(s === 0) this.counter = 0
+            // Supponiamo che il numero slot parte da 0
+            return (c:number, s:number) => {
 
-                if(this.campiInterni[campo].prenotazioni[this.counter].nSlot === s+1){
-                    let position = this.counter
-                    if(this.counter < (this.campiInterni[campo].prenotazioni.length-1)) 
-                        this.counter++
-                    return this.campiInterni[campo].prenotazioni[position].color
-                } else {
+                if ( !( c in this.campiInterni ) ) return
+
+                const campo: any = this.campiInterni[c];
+
+                let prenotaz = null;
+                if ( s in campo.prenotazioni )
+                    prenotaz = campo.prenotazioni[s]
+
+                if ( prenotaz === null ){
                     return Color.Green
-                }
+                } else return prenotaz.color
+        
             }
         },
-        findColorEsterni(){
-
-            return(campo:number, s:number) => {
-
-                //Se è una nuova riga allora il counter torna a zero
-                if(s === 0) this.counter = 0
-
-                if(this.campiEsterni[campo].prenotazioni[this.counter].nSlot === s+1){
-                    let position = this.counter
-                    if(this.counter < (this.campiEsterni[campo].prenotazioni.length-1)) 
-                        this.counter++
-                    return this.campiEsterni[campo].prenotazioni[position].color
-                } else {
-                    return Color.Green
-                }
-            }
-            }
     },
     components: { ItemSlot, ReservationModalVue }, 
 }
@@ -175,10 +159,11 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                 <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiInterni[campo-1].id }}</th>   
                 <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
                 <td v-for="i in (this.orari.length-1)" align="center">
-                    <ItemSlot v-on:click.native="showModal(i-1)"
-                    :color=findColorInterni(campo-1,i-1)
-                    :inizio=this.orari[i-1]
-                    :fine="this.orari[i]"
+                    <ItemSlot
+                        v-on:click.native="showModal(i-1, findColorInterni(campo-1,i))"
+                        :color=findColorInterni(campo-1,i)
+                        :inizio=this.orari[i-1]
+                        :fine="this.orari[i]"
                     ></ItemSlot></td>
             </tr>
         </tbody>
