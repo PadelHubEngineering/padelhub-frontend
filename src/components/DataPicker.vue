@@ -77,10 +77,10 @@ export default {
             </option>
         </select>
         </div>
-      <div class="custom-select" ref='month'>
-        <select @change='editValue("months", $event)'>
+      <div class="custom-select">
+        <select @change='editValue("months", $event)' ref='month'>
           <option v-for="(month, index) in months" :key="month" :value="index">
-            {{ month }}
+            {{ month}}
           </option>
         </select>
       </div>
@@ -96,6 +96,7 @@ export default {
         </select>
       </div>
     </div>
+
 </template>
 
 

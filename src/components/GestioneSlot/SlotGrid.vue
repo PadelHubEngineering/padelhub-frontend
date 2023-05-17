@@ -163,55 +163,59 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
 <template>
     
-    <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI INTERNI</p><br>
-    <table class="table-fixed transform-gpu">
-        <thead class="sticky top-0">
-            <tr> 
-                <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
-                <th class=""></th>
-                <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="campo in this.campiInterni.length">
-                <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiInterni[campo-1].id }}</th>   
-                <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
-                <td v-for="i in (this.orari.length-1)" align="center">
-                    <ItemSlot
-                        v-on:click.native="showModal(i-1, findColorInterni(campo-1,i))"
-                        :color=findColorInterni(campo-1,i)
-                        :inizio=this.orari[i-1]
-                        :fine="this.orari[i]"
-                    ></ItemSlot></td>
-            </tr>
-        </tbody>
-    </table>
+    <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center pt-5">CAMPI INTERNI</p><br>
+    <div id="table-scroll" class="table-scroll table-wrap">
+        <table class="table-fixed transform-gpu">
+            <thead class="sticky top-0">
+                <tr> 
+                    <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
+                    <th class=""></th>
+                    <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="campo in this.campiInterni.length">
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiInterni[campo-1].id }}</th>   
+                    <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
+                    <td v-for="i in (this.orari.length-1)" align="center">
+                        <ItemSlot
+                            v-on:click.native="showModal(i-1, findColorInterni(campo-1,i))"
+                            :color=findColorInterni(campo-1,i)
+                            :inizio=this.orari[i-1]
+                            :fine="this.orari[i]"
+                        ></ItemSlot></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <br><br><br>
 
     <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI ESTERNI</p><br>
-    <table class="table-fixed transform-gpu">
-        <thead class="sticky top-0">
-            <tr> 
-                <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
-                <th class=""></th>
-                <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="campo in this.campiEsterni.length">
-                <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiEsterni[campo-1].id }}</th>   
-                <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
-                <td v-for="i in (this.orari.length-1)" align="center">
-                    <ItemSlot
-                        v-on:click.native="showModal(i-1, findColorEsterni(campo-1,i))"
-                        :color=findColorEsterni(campo-1,i)
-                        :inizio=this.orari[i-1]
-                        :fine="this.orari[i]"
-                    ></ItemSlot></td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="table-scroll" class="table-scroll table-wrap">
+     <table class="table-fixed transform-gpu">
+            <thead class="sticky top-0">
+                <tr> 
+                    <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
+                    <th class=""></th>
+                    <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="campo in this.campiEsterni.length">
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiEsterni[campo-1].id }}</th>   
+                    <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
+                    <td v-for="i in (this.orari.length-1)" align="center">
+                        <ItemSlot
+                            v-on:click.native="showModal(i-1, findColorEsterni(campo-1,i))"
+                            :color=findColorEsterni(campo-1,i)
+                            :inizio=this.orari[i-1]
+                            :fine="this.orari[i]"
+                        ></ItemSlot></td>
+                </tr>
+            </tbody>
+     </table>
+    </div>
 
     
 
@@ -225,11 +229,26 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 <style>
 
 table {
-  /* border-collapse: separate; */
-  border-spacing: 35px 10px;
+  border-collapse: separate; 
+  border-spacing: 10px 5px;
   width: auto;
-  min-width: 1300px;
+  min-width: 1900px;
+  padding-right: 200px;
 }
 
+.table-scroll {
+	position:relative;
+	max-width:auto;
+    max-height: 500px;
+	/* margin:auto; */
+	overflow:hidden;
+	border:1px solid #eee;
+    
+}
+
+.table-wrap {
+	width:100%;
+	overflow:auto;
+}
 
 </style>

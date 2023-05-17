@@ -1,10 +1,14 @@
 <script setup lang="ts">
     import StructureIcon from "../icons/StructureIcon.vue"
     import ItemWithHeaderIcon from "./ItemWithHeaderIcon.vue"
+    
 </script>
 
 <template>
-    <div class="menuLaterale bg-bluPadelHub pt-20 font-circolo">
+
+    <div class="menuLaterale bg-bluPadelHub pt-8">
+
+        <img src="/img/logoPadelHub.png" width="150" height="150" class="mx-auto pb-4"/>
 
         <ItemWithHeaderIcon
             v-for="item in this.menu"
@@ -57,3 +61,4 @@
         ]
     }
 </script>
+
