@@ -8,7 +8,7 @@ import ItemSlot, { Color } from './ItemSlot.vue';
     data() {
         return {
             oraApertura: new Date(1683961200000),
-            oraChiusura: new Date(1683990000000),
+            oraChiusura: new Date(1684011600000),
             durataSlot: "1:00",
             orari: [''],
             campiInterni: [
@@ -108,7 +108,6 @@ import ItemSlot, { Color } from './ItemSlot.vue';
         },
         showModal(value:number, color: Color){
             this.$refs.modale.openModal(this.orari[value], this.orari[value+1], color)
-            //console.log(this.orari[value] + " - " + this.orari[value+1])
         }
 
     },
@@ -135,6 +134,25 @@ import ItemSlot, { Color } from './ItemSlot.vue';
         
             }
         },
+        findColorEsterni(){
+
+            // Supponiamo che il numero slot parte da 0
+            return (c:number, s:number) => {
+
+                if ( !( c in this.campiEsterni ) ) return
+
+                const campo: any = this.campiEsterni[c];
+
+                let prenotaz = null;
+                if ( s in campo.prenotazioni )
+                    prenotaz = campo.prenotazioni[s]
+
+                if ( prenotaz === null ){
+                    return Color.Green
+                } else return prenotaz.color
+
+        }
+}
     },
     components: { ItemSlot, ReservationModalVue }, 
 }
@@ -171,10 +189,11 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
     <br><br><br>
 
-    <!-- <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI ESTERNI</p><br>
-    <table class="table-fixed border-spacing-2">
+    <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI ESTERNI</p><br>
+    <table class="table-fixed transform-gpu">
         <thead class="sticky top-0">
             <tr> 
+                <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
                 <th class=""></th>
                 <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
             </tr>
@@ -182,11 +201,20 @@ import ItemSlot, { Color } from './ItemSlot.vue';
         <tbody>
             <tr v-for="campo in this.campiEsterni.length">
                 <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiEsterni[campo-1].id }}</th>   
-                <td v-for="i in (this.orari.length-1)"><ItemSlot v-on:click.native="showModal" :color=findColorEsterni(campo-1,i-1)></ItemSlot></td>
+                <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
+                <td v-for="i in (this.orari.length-1)" align="center">
+                    <ItemSlot
+                        v-on:click.native="showModal(i-1, findColorEsterni(campo-1,i))"
+                        :color=findColorEsterni(campo-1,i)
+                        :inizio=this.orari[i-1]
+                        :fine="this.orari[i]"
+                    ></ItemSlot></td>
             </tr>
         </tbody>
-    </table> -->
+    </table>
+
     
+
     <ReservationModalVue ref="modale"></ReservationModalVue>
 
 </template>
@@ -197,9 +225,10 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 <style>
 
 table {
-  border-collapse: separate;
-  border-spacing: 30px 10px;
-  width: 1300px;
+  /* border-collapse: separate; */
+  border-spacing: 35px 10px;
+  width: auto;
+  min-width: 1300px;
 }
 
 

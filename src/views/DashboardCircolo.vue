@@ -2,18 +2,21 @@
     import ItemSlot from "@/components/GestioneSlot/ItemSlot.vue";
 import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
 import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
-import ReservationModalVue from "@/components/riservaSlotCircolo/ReservationModal.vue";
+import DataPicker from "@/components/DataPicker.vue";
+import DataPickerVue from "@/components/DataPicker.vue";
 
 </script>
 
 
 <template>
-    <div class="flex h-screen w-screen">
+    <div class="flex h-screen w-screen overflow-x-auto">
         <CircoloMenuComponent
             class='w-1/5'
         />
 
-        <div class="w-4/5 ml-10 mt-5">
+        <div class="w-4/5 ml-5 mt-5 overflow-x-auto">
+            <DataPickerVue v-model="date"></DataPickerVue>
+            <br><br>
             <SlotGrid></SlotGrid>
         </div>
     </div>
@@ -23,7 +26,9 @@ import ReservationModalVue from "@/components/riservaSlotCircolo/ReservationModa
     export default {
     name: "DashboardCircolo",
     data() {
-        return {};
+        return {
+            date: new Date()
+        };
     },
     methods: {
         getUsername(): string {
@@ -32,7 +37,8 @@ import ReservationModalVue from "@/components/riservaSlotCircolo/ReservationModa
     },
     component: [
         CircoloMenuComponent,
-        SlotGrid
+        SlotGrid,
+        DataPickerVue
     ]
     
 }
