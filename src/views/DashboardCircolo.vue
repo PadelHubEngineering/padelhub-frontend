@@ -5,7 +5,7 @@ import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
 import DataPicker from "@/components/DataPicker.vue";
 import DataPickerVue from "@/components/DataPicker.vue";
 import axios from "axios";
-import { prependOnceListener } from "process";
+
 
 </script>
 
@@ -17,7 +17,11 @@ import { prependOnceListener } from "process";
         <div class="w-4/5 max-w-4/5 ml-5 mt-5 overflow-x-auto">
             <DataPickerVue v-model="date"></DataPickerVue>
             <br><br>
-            <SlotGrid></SlotGrid>
+            <SlotGrid 
+                :orari="this.map.orari"
+                :campiInterni="this.map.campiInterni"
+                :campiEsterni="this.map.campiEsterni"
+            ></SlotGrid>
         </div>
     </div>
 </template>
@@ -41,9 +45,33 @@ import { prependOnceListener } from "process";
                 durataSlot: 60,
                 campiInterni: [
                     {
-                        idCampo: 3,
+                        idCampo: 1,
                         prenotazioni: [
                         {
+                                id: "asasa",
+                                inizioSlot: "2023-06-18T12:00:00.000Z",
+                                fineSlot: "2023-06-18T13:00:00.000Z",
+                                tipoUtente: "Circolo"
+                            }
+                        ]
+                    },
+                    {
+                        idCampo: 2,
+                        prenotazioni: [
+                        {
+                                id: "asasa",
+                                inizioSlot: "2023-06-18T12:00:00.000Z",
+                                fineSlot: "2023-06-18T13:00:00.000Z",
+                                tipoUtente: "Giocatore"
+                            }
+                        ]
+                    }
+                ],
+                campiEsterni: [
+                    {
+                        idCampo: 3,
+                        prenotazioni: [
+                            {
                                 id: "asasa",
                                 inizioSlot: "2023-06-18T12:00:00.000Z",
                                 fineSlot: "2023-06-18T13:00:00.000Z",
@@ -55,25 +83,7 @@ import { prependOnceListener } from "process";
                         idCampo: 4,
                         prenotazioni: []
                     }
-                ],
-                campiEsterni: [
-                    {
-                        idCampo: 1,
-                        prenotazioni: [
-                            {
-                                id: "asasa",
-                                inizioSlot: "2023-06-18T12:00:00.000Z",
-                                fineSlot: "2023-06-18T13:00:00.000Z",
-                                tipoUtente: "Circolo"
-                            },
-                            {
-                                id: "asasa",
-                                inizioSlot: "2023-06-18T13:00:00.000Z",
-                                fineSlot: "2023-06-18T14:00:00.000Z",
-                                tipoUtente: "Circolo"
-                            }
-                        ]
-                    }
+
                 ]
             },
 
@@ -122,7 +132,6 @@ import { prependOnceListener } from "process";
             //Per ogni campo Esterno 
             this.risposta.campiEsterni.forEach((item)=> { this.createAddCampo(item, 'Esterni')}) 
             
-            console.log(this.map)
         },
 
         createAddCampo(item: any, tipo: string){

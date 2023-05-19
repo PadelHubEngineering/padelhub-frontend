@@ -7,200 +7,47 @@ import ItemSlot, { Color } from './ItemSlot.vue';
     name: "SlotColumn",
     data() {
         return {
-            oraApertura: new Date(1683961200000),
-            oraChiusura: new Date(1684011600000),
-            durataSlot: "1:00",
-            orari: [''],
-            campiInterni: [
-
-                {
-                    id: "CAMPO 1",
-                    prenotazioni: {
-                        7: {
-                            nSlot: 7, 
-                            color: Color.Red
-                        }
-                    }
-                },
-
-                {
-                    id: "CAMPO 2",
-                    prenotazioni: {
-                        3: {
-                            nSlot: 3, 
-                            color: Color.Red
-                        },
-                        4: {
-                            nSlot: 4, 
-                            color: Color.Yellow
-                        },
-                        6: {
-                            nSlot: 6, 
-                            color: Color.Red
-                        },
-                        7: {
-                            nSlot: 7, 
-                            color: Color.Yellow
-                        }
-                    },
-                },
-                {
-                    id: "CAMPO 3",
-                    prenotazioni: {
-                        6: {
-                            nSlot: 6, 
-                            color: Color.Red
-                        }
-                    }
-                },
-                {
-                    id: "CAMPO 4",
-                    prenotazioni: {
-                        7: {
-                            nSlot: 7, 
-                            color: Color.Red
-                        }
-                    }
-                },
-                {
-                    id: "CAMPO 5",
-                    prenotazioni: {
-                        7: {
-                            nSlot: 7, 
-                            color: Color.Red
-                        }
-                    }
-                },
-                {
-                    id: "CAMPO 6",
-                    prenotazioni: {
-                        7: {
-                            nSlot: 7, 
-                            color: Color.Red
-                        }
-                    }
-                }
-
-
-            ],
-            campiEsterni: [
-            {
-                    id: "CAMPO 7",
-                    prenotazioni: {
-                        "": { 
-                            color: Color.Red
-                        },
-                        3: {
-                            nSlot: 3, 
-                            color: Color.Yellow
-                        }
-                    }
-                },
-
-                {
-                    id: "CAMPO 8",
-                    prenotazioni: {
-                        6: {
-                            nSlot: 6, 
-                            color: Color.Red
-                        }
-            
-                    }
-                },
-                {
-                    id: "CAMPO 9",
-                    prenotazioni: {
-                        6: {
-                            nSlot: 6, 
-                            color: Color.Red
-                        }
-            
-                    }
-                },
-                {
-                    id: "CAMPO 10",
-                    prenotazioni: {
-                        6: {
-                            nSlot: 6, 
-                            color: Color.Red
-                        }
-            
-                    }
-                }
-            ],
-            counter: 0
-        };
+        }
     },
     methods: {
-        findFasceOrarie(){
 
-            // per avere i millisecondi come number
-            var current = this.oraApertura.valueOf()
-            var final = this.oraChiusura.valueOf()
-
-            // converto la durata dello slot in millesecondi
-            var s = this.durataSlot.split(":")
-            var millisecSlot = (+s[0])*60*60000 + (+s[1])*60000
-
-            var date = new Date(current)
-            this.orari[0] = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
-            current += millisecSlot
-
-            while(current <= final){
-                date = new Date(current)
-                this.orari.push(date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
-                current += millisecSlot
-            }
-        },
         showModal(value:number, color: Color){
             this.$refs.modale.openModal(this.orari[value], this.orari[value+1], color)
         }
 
     },
-    mounted(){
-        this.findFasceOrarie()
-    },
     computed: {
         findColorInterni(){
 
-            // Supponiamo che il numero slot parte da 0
             return (c:number, s:number) => {
 
+                var key: string = this.orari[s]
+                
                 if ( !( c in this.campiInterni ) ) return
 
-                const campo: any = this.campiInterni[c];
-
-                let prenotaz = null;
-                if ( s in campo.prenotazioni )
-                    prenotaz = campo.prenotazioni[s]
-
-                if ( prenotaz === null ){
-                    return Color.Green
-                } else return prenotaz.color
+                if(this.campiInterni[c].prenotazioni.get(key)){ //Se esiste una prenotazione per quell'orario 
+                    return this.campiInterni[c].prenotazioni.get(key).color
+                } else return Color.Green
         
             }
         },
         findColorEsterni(){
 
-            // Supponiamo che il numero slot parte da 0
             return (c:number, s:number) => {
+
+                var key: string = this.orari[s]
 
                 if ( !( c in this.campiEsterni ) ) return
 
-                const campo: any = this.campiEsterni[c];
+                if(this.campiEsterni[c].prenotazioni.get(key)){ //Se esiste una prenotazione per quell'orario 
+                    return this.campiEsterni[c].prenotazioni.get(key).color
+                } else return Color.Green
 
-                let prenotaz = null;
-                if ( s in campo.prenotazioni )
-                    prenotaz = campo.prenotazioni[s]
-
-                if ( prenotaz === null ){
-                    return Color.Green
-                } else return prenotaz.color
-
-        }
+}
 }
     },
-    components: { ItemSlot, ReservationModalVue }, 
+    components: { ItemSlot, ReservationModalVue },
+    props: ['orari', 'campiInterni', 'campiEsterni'] 
 }
 
 
@@ -221,12 +68,12 @@ import ItemSlot, { Color } from './ItemSlot.vue';
             </thead>
             <tbody>
                 <tr v-for="campo in this.campiInterni.length">
-                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white sticky left-0">{{ this.campiInterni[campo-1].id }}</th>   
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white sticky left-0">{{ this.campiInterni[campo-1].idCampo }}</th>   
                     <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
                     <td v-for="i in (this.orari.length-1)" align="center">
                         <ItemSlot
-                            v-on:click.native="showModal(i-1, findColorInterni(campo-1,i))"
-                            :color=findColorInterni(campo-1,i)
+                            v-on:click.native="showModal(i-1, findColorInterni(campo-1,i-1))"
+                            :color=findColorInterni(campo-1,i-1)
                             :inizio=this.orari[i-1]
                             :fine="this.orari[i]"
                         ></ItemSlot></td>
@@ -249,12 +96,12 @@ import ItemSlot, { Color } from './ItemSlot.vue';
             </thead>
             <tbody>
                 <tr v-for="campo in this.campiEsterni.length">
-                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white">{{ this.campiEsterni[campo-1].id }}</th>   
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white">{{ this.campiEsterni[campo-1].idCampo }}</th>   
                     <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
                     <td v-for="i in (this.orari.length-1)" align="center">
                         <ItemSlot
-                            v-on:click.native="showModal(i-1, findColorEsterni(campo-1,i))"
-                            :color=findColorEsterni(campo-1,i)
+                            v-on:click.native="showModal(i-1, findColorEsterni(campo-1,i-1))"
+                            :color=findColorEsterni(campo-1,i-1)
                             :inizio=this.orari[i-1]
                             :fine="this.orari[i]"
                         ></ItemSlot></td>
