@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import ItemSlot, { Color } from "@/components/GestioneSlot/ItemSlot.vue";
-import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
-import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
-import DataPicker from "@/components/DataPicker.vue";
-import DataPickerVue from "@/components/DataPicker.vue";
+    import CircoloMenuComponent from "../components/CircoloMenuItems/CircoloMenuComponent.vue"
+    import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
+    import DataPicker from "@/components/DataPicker.vue";
+    import DataPickerVue from "@/components/DataPicker.vue";
 import axios from "axios";
 
 
@@ -99,7 +99,9 @@ import axios from "axios";
 
         sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
 
-            console.log(dataGiorno)
+            dataGiorno.setMonth(dataGiorno.getMonth() + 1)
+            var dataToPass: string = dataGiorno.getFullYear() + "-" + dataGiorno.getMonth() + "-" + dataGiorno.getDate() 
+            
 
             // console.log(this.$store.state.auth.token)
     
