@@ -39,54 +39,6 @@ import axios from "axios";
     data() {
         return {
             date: new Date(),
-            risposta: {
-                orarioApertura: "1899-12-31T07:00:00.000Z",
-                orarioChiusura: "1899-12-31T18:00:00.000Z",
-                durataSlot: 60,
-                campiInterni: [
-                    {
-                        idCampo: 1,
-                        prenotazioni: [
-                        {
-                                id: "asasa",
-                                inizioSlot: "2023-06-18T11:00:00.000Z",
-                                fineSlot: "2023-06-18T12:00:00.000Z",
-                                tipoUtente: "Circolo"
-                            }
-                        ]
-                    },
-                    {
-                        idCampo: 2,
-                        prenotazioni: [
-                        {
-                                id: "asasa",
-                                inizioSlot: "2023-06-18T12:00:00.000Z",
-                                fineSlot: "2023-06-18T13:00:00.000Z",
-                                tipoUtente: "Giocatore"
-                            }
-                        ]
-                    }
-                ],
-                campiEsterni: [
-                    {
-                        idCampo: 3,
-                        prenotazioni: [
-                            {
-                                id: "asasa",
-                                inizioSlot: "2023-06-18T12:00:00.000Z",
-                                fineSlot: "2023-06-18T13:00:00.000Z",
-                                tipoUtente: "Circolo"
-                            }
-                        ]
-                    },
-                    {
-                        idCampo: 4,
-                        prenotazioni: []
-                    }
-
-                ]
-            },
-
             map: {
                 orari: [""],
                 campiInterni: [] as Campo[],
@@ -99,44 +51,48 @@ import axios from "axios";
 
         sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
 
-            dataGiorno.setMonth(dataGiorno.getMonth() + 1)
-            var dataToPass: string = dataGiorno.getFullYear() + "-" + dataGiorno.getMonth() + "-" + dataGiorno.getDate() 
+            this.map = {
+                orari: [""],
+                campiInterni: [] as Campo[],
+                campiEsterni: [] as Campo[]
+            }
+
+
+            var mese = dataGiorno.getMonth() + 1 
+            var dataToPass: string = dataGiorno.getFullYear() + "-" + mese.toString().padStart(2, '0') + "-" + dataGiorno.getDate().toString().padStart(2, '0') 
             
-
-            // console.log(this.$store.state.auth.token)
     
-            // if (!axios) return
+            if (!axios) return
 
-            // axios.get(
-            //     `${import.meta.env.VITE_BACK_URL}/api/v1/prenotazioniSlot`, //Impostare l'URL a cui collagarsi
-            //      {
-            //         headers: {
-            //             'data-attuale': this.date.toString(),
-            //             'x-access-token': this.$store.state.auth.token
-            //         }
-            //      }
-            // ).then(response => {
+            axios.get(
+                `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioniSlot/${dataToPass}`, //Impostare l'URL a cui collagarsi
+                 {
+                    headers: {
+                        'x-access-token': this.$store.state.auth.token
+                    }
+                 }
+            ).then(response => {
 
-            //     console.log(response)
-            //    // this.risposta = response
+                console.log(response)
+                this.findFasceOrarie(response.data)
+                this.createMap(response.data)
       
 
-            // }).catch( err => {
-            //     const { message } = err.response.data;
-            //     console.log(message)
-            // })
+            }).catch( err => {
+                const { message } = err.response.data;
+                console.log(message)
+            })
             
         },
 
-        createMap(){
+        createMap(risposta:any){
 
             //Per ogni campo interno
-            this.risposta.campiInterni.forEach((item)=> { this.createAddCampo(item, 'Interni')})
+            risposta.payload.campiInterni.forEach((item:any)=> { this.createAddCampo(item, 'Interni')})
 
             //Per ogni campo Esterno 
-            this.risposta.campiEsterni.forEach((item)=> { this.createAddCampo(item, 'Esterni')}) 
+            risposta.payload.campiEsterni.forEach((item:any)=> { this.createAddCampo(item, 'Esterni')}) 
             
-            console.log(this.map)
         },
 
         createAddCampo(item: any, tipo: string){
@@ -169,18 +125,20 @@ import axios from "axios";
                     this.map.campiEsterni.push(o)
         },
 
-        findFasceOrarie(){ //funzione per popolare l'array contentente l'inizio di tutte le fasce orarie e l'orario di chiusura del circolo come ultimo elemento
+        findFasceOrarie(risposta:any){ //funzione per popolare l'array contentente l'inizio di tutte le fasce orarie e l'orario di chiusura del circolo come ultimo elemento
 
             // per avere i millisecondi come number
             
-            var aperturaTime = new Date(this.risposta.orarioApertura)
-            var chiusuraTime = new Date(this.risposta.orarioChiusura)
+            var aperturaTime = new Date(risposta.payload.orarioApertura)
+            var chiusuraTime = new Date(risposta.payload.orarioChiusura)
+
 
             var current = aperturaTime.valueOf() //Millisecondi
             var final = chiusuraTime.valueOf() //Millisecondi data chiusura
 
+
             // converto la durata dello slot in millesecondi
-            var millisecSlot = this.risposta.durataSlot * 60000
+            var millisecSlot = risposta.payload.durataSlot * 60000
 
             var dateToConvert = new Date(current)
             this.map.orari[0] = dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
@@ -198,9 +156,9 @@ import axios from "axios";
     },
 
     beforeMount(){ //Da fare prima di caricare la pagina
-       // this.sendRequestToBack()
-       this.findFasceOrarie(),
-       this.createMap()
+          this.sendRequestToBack(new Date())
+    //    this.findFasceOrarie(),
+    //    this.createMap()
     },
 
     component: [
