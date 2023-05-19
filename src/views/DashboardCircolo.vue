@@ -15,7 +15,7 @@ import axios from "axios";
         <CircoloMenuComponent  class='w-1/5 min-w-[300px]'/>
 
         <div class="w-4/5 max-w-4/5 ml-5 mt-5 overflow-x-auto">
-            <DataPickerVue v-model="date"></DataPickerVue>
+            <DataPickerVue v-model="date" @update="sendRequestToBack"></DataPickerVue>
             <br><br>
             <SlotGrid 
                 :orari="this.map.orari"
@@ -49,8 +49,8 @@ import axios from "axios";
                         prenotazioni: [
                         {
                                 id: "asasa",
-                                inizioSlot: "2023-06-18T12:00:00.000Z",
-                                fineSlot: "2023-06-18T13:00:00.000Z",
+                                inizioSlot: "2023-06-18T11:00:00.000Z",
+                                fineSlot: "2023-06-18T12:00:00.000Z",
                                 tipoUtente: "Circolo"
                             }
                         ]
@@ -97,30 +97,32 @@ import axios from "axios";
     },
     methods: {
 
-        sendRequestToBack(){ //funzione per mandare la richiesta al back
+        sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
 
-            console.log(this.$store.state.auth.token)
+            console.log(dataGiorno)
+
+            // console.log(this.$store.state.auth.token)
     
-            if (!axios) return
+            // if (!axios) return
 
-            axios.get(
-                `${import.meta.env.VITE_BACK_URL}/api/v1/prenotazioniSlot`, //Impostare l'URL a cui collagarsi
-                 {
-                    headers: {
-                        'data-attuale': this.date.toString(),
-                        'x-access-token': this.$store.state.auth.token
-                    }
-                 }
-            ).then(response => {
+            // axios.get(
+            //     `${import.meta.env.VITE_BACK_URL}/api/v1/prenotazioniSlot`, //Impostare l'URL a cui collagarsi
+            //      {
+            //         headers: {
+            //             'data-attuale': this.date.toString(),
+            //             'x-access-token': this.$store.state.auth.token
+            //         }
+            //      }
+            // ).then(response => {
 
-                console.log(response)
-               // this.risposta = response
+            //     console.log(response)
+            //    // this.risposta = response
       
 
-            }).catch( err => {
-                const { message } = err.response.data;
-                console.log(message)
-            })
+            // }).catch( err => {
+            //     const { message } = err.response.data;
+            //     console.log(message)
+            // })
             
         },
 
@@ -132,6 +134,7 @@ import axios from "axios";
             //Per ogni campo Esterno 
             this.risposta.campiEsterni.forEach((item)=> { this.createAddCampo(item, 'Esterni')}) 
             
+            console.log(this.map)
         },
 
         createAddCampo(item: any, tipo: string){

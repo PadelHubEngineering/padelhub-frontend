@@ -30,7 +30,7 @@ export default {
         dateValue.set(unit, evt.target.value)
         daysInMonth.value = dateValue.daysInMonth()
         updateElements()
-        context.emit('update', dateValue)
+        context.emit('update', dateValue._d) //Per passare la data aggiornata
     }
 
     onMounted(() => {
@@ -38,11 +38,9 @@ export default {
     })
 
     const updateElements = () => {
-    // month.value gives us the <select>
         month.value.value = dateValue.month()
         date.value.value = dateValue.date()
         year.value.value = dateValue.format('YYYY')
-        //console.log(date.value.value + " - " + month.value.value + " - " + year.value.value)
     }
 
     const month: any = ref(null)
