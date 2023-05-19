@@ -1,35 +1,76 @@
 <script setup lang='ts'>
 
     import { computed, onMounted, ref, type Ref } from 'vue'
-import { Color } from '../GestioneSlot/ItemSlot.vue'
+    import { Color } from '../GestioneSlot/ItemSlot.vue'
+    import axios, { AxiosError } from 'axios'
+    import { useStore } from 'vuex';
 
-    var ora_inizio = ref("")
-    var ora_fine = ref("")
+    const store = useStore();
 
+    var id_campo = ref("")
+    var data_ora_inizio = ref(new Date())
+    var data_ora_fine = ref(new Date())
     var slot_color: Ref<Color | null> = ref(null)
+    var req_error = ref("")
 
     const dialog = ref<HTMLDialogElement>()
     const buttonStyle = ref("rounded-2xl p-2 border-solid border-bluPadelHub border-2")
 
-    function openModal(start:string, end: string, color: Color) {
-        ora_inizio.value = start
-        ora_fine.value = end
+
+    function openModal(_data_ora_inizio: Date, _ora_fine: Date, color: Color, _id_campo: string, ) {
+        data_ora_inizio.value = _data_ora_inizio;
+        data_ora_fine.value = _ora_fine;
         slot_color.value = color
+        id_campo.value = _id_campo
 
         dialog.value?.showModal()
     }
 
     function closeModal() {
+        req_error.value = ""
         dialog.value?.close()
     }
 
-    function confirm() {
-        console.log("Aiuto devo rimborsare un sacco di genteeeeee")
+    async function confirm() {
+        console.log(`tento prenotazione con data: ${data_ora_inizio.value} e campo: ${id_campo.value}`)
+
+        let response;
+
+        try{
+            response = await axios.post(
+                `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioneSlot`,
+                {
+                    dataOraPrenotazione: data_ora_inizio.value,
+                    idCampo: id_campo.value,
+                    token: store.state.auth.token
+                },
+            )
+        } catch (error: any) {
+            req_error.value = error.response.data.status
+            return false;
+        }
+
+        if ( response === undefined || !response.data.success ){
+            req_error.value = response?.data.message || "Errore generico"
+            return false;
+        } else {
+
+            alert(response.data.payload.message)
+
+            closeModal();
+
+            return response.data.payload.prenotazione;
+        }
+
     }
 
     defineExpose({
         openModal
     })
+
+    function dateToTime(date: Date) {
+        return `${date.getHours()}:${date.getMinutes()}`
+    }
 
     let isRosso = computed(() => {
         return slot_color.value == Color.Red
@@ -40,7 +81,9 @@ import { Color } from '../GestioneSlot/ItemSlot.vue'
     let isGiallo = computed(() => {
         return slot_color.value == Color.Yellow
     })
-
+    let hasNotError = computed(() => {
+        return req_error.value === ""
+    })
 
 </script>
 
@@ -58,7 +101,7 @@ import { Color } from '../GestioneSlot/ItemSlot.vue'
             </h2>
 
             <p>
-                Stai per occupare lo slot <b>{{ ora_inizio }} - {{ ora_fine }}</b>
+                Stai per occupare lo slot <b>{{ dateToTime(data_ora_inizio) }} - {{ dateToTime(data_ora_fine) }}</b>
             </p>
             <p>
                 In questo modo nessuna partita potrà essere creata in questo slot
@@ -75,6 +118,9 @@ import { Color } from '../GestioneSlot/ItemSlot.vue'
             <button @click.prevent='confirm' :class='[ buttonStyle ]' class='bg-bluPadelHub text-white'>Conferma</button>
 
         </div>
+        <p :class="{ hidden: hasNotError }" class='text-redBusy'>
+            {{ req_error }}
+        </p>
 
 
 
