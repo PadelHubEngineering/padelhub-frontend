@@ -52,16 +52,42 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                             color: Color.Red
                         }
                     }
+                },
+                {
+                    id: "CAMPO 4",
+                    prenotazioni: {
+                        7: {
+                            nSlot: 7, 
+                            color: Color.Red
+                        }
+                    }
+                },
+                {
+                    id: "CAMPO 5",
+                    prenotazioni: {
+                        7: {
+                            nSlot: 7, 
+                            color: Color.Red
+                        }
+                    }
+                },
+                {
+                    id: "CAMPO 6",
+                    prenotazioni: {
+                        7: {
+                            nSlot: 7, 
+                            color: Color.Red
+                        }
+                    }
                 }
 
 
             ],
             campiEsterni: [
             {
-                    id: "CAMPO 4",
+                    id: "CAMPO 7",
                     prenotazioni: {
-                        2: {
-                            nSlot: 2, 
+                        "": { 
                             color: Color.Red
                         },
                         3: {
@@ -72,7 +98,27 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                 },
 
                 {
-                    id: "CAMPO 5",
+                    id: "CAMPO 8",
+                    prenotazioni: {
+                        6: {
+                            nSlot: 6, 
+                            color: Color.Red
+                        }
+            
+                    }
+                },
+                {
+                    id: "CAMPO 9",
+                    prenotazioni: {
+                        6: {
+                            nSlot: 6, 
+                            color: Color.Red
+                        }
+            
+                    }
+                },
+                {
+                    id: "CAMPO 10",
                     prenotazioni: {
                         6: {
                             nSlot: 6, 
@@ -170,12 +216,12 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                 <tr> 
                     <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
                     <th class=""></th>
-                    <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+                    <th v-for="i in (this.orari.length-1)" class="bg-white text-bluPadelHub text-lg font-circolo font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="campo in this.campiInterni.length">
-                    <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiInterni[campo-1].id }}</th>   
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white sticky left-0">{{ this.campiInterni[campo-1].id }}</th>   
                     <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
                     <td v-for="i in (this.orari.length-1)" align="center">
                         <ItemSlot
@@ -193,17 +239,17 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
     <p class="text-bluPadelHub font-bold font-circolo drop-shadow text-2xl text-center">CAMPI ESTERNI</p><br>
     <div id="table-scroll" class="table-scroll table-wrap">
-     <table class="table-fixed transform-gpu">
+        <table class="table-fixed transform-gpu">
             <thead class="sticky top-0">
                 <tr> 
                     <!-- Metto giù l'header delle tabelle con le varie fascie orarie -->
                     <th class=""></th>
-                    <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub text-lg font-circolo drop-shadow font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
+                    <th v-for="i in (this.orari.length-1)" class="text-bluPadelHub bg-white text-lg font-circolo font-thin"> {{ this.orari[i-1] }} - {{ this.orari[i] }}   </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="campo in this.campiEsterni.length">
-                    <th scope="row" class="text-bluPadelHub text-lg font-circolo drop-shadow">{{ this.campiEsterni[campo-1].id }}</th>   
+                    <th scope="row" class="text-bluPadelHub text-lg font-circolo bg-white">{{ this.campiEsterni[campo-1].id }}</th>   
                     <!-- per ogni fascia oraria guardo se esiste una prenotazione nello slot -->
                     <td v-for="i in (this.orari.length-1)" align="center">
                         <ItemSlot
@@ -214,7 +260,7 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                         ></ItemSlot></td>
                 </tr>
             </tbody>
-     </table>
+        </table>
     </div>
 
     
@@ -233,22 +279,53 @@ table {
   border-spacing: 10px 5px;
   width: auto;
   min-width: 1900px;
-  padding-right: 200px;
 }
 
 .table-scroll {
 	position:relative;
 	max-width:auto;
-    max-height: 500px;
+    max-height: 350px;
 	/* margin:auto; */
 	overflow:hidden;
-	border:1px solid #eee;
+	border:0px;
     
 }
 
 .table-wrap {
 	width:100%;
 	overflow:auto;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  border: 10px solid transparent;
+  background-color: rgba(0,0,0,0.2);
+  background-clip: content-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 20px;
+  border: 8px solid transparent;
+  background-color: rgba(0, 0, 0, 0.318);
+  background-clip: content-box;
+}
+
+
+.fixed-side {
+	visibility:visible;
 }
 
 </style>

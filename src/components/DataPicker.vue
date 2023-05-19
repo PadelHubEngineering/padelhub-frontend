@@ -42,7 +42,7 @@ export default {
         month.value.value = dateValue.month()
         date.value.value = dateValue.date()
         year.value.value = dateValue.format('YYYY')
-        console.log(date.value.value + " - " + month.value.value + " - " + year.value.value)
+        //console.log(date.value.value + " - " + month.value.value + " - " + year.value.value)
     }
 
     const month: any = ref(null)
