@@ -18,9 +18,9 @@ import axios from "axios";
             <DataPickerVue v-model="date" @update="sendRequestToBack"></DataPickerVue>
             <br><br>
             <SlotGrid 
-                :orari="this.map.orari"
-                :campiInterni="this.map.campiInterni"
-                :campiEsterni="this.map.campiEsterni"
+                :orari="this.mappa.orari"
+                :campiInterni="this.mappa.campiInterni"
+                :campiEsterni="this.mappa.campiEsterni"
                 :data="this.date"
             ></SlotGrid>
         </div>
@@ -40,7 +40,7 @@ import axios from "axios";
     data() {
         return {
             date: new Date(),
-            map: {
+            mappa: {
                 orari: [""],
                 campiInterni: [] as Campo[],
                 campiEsterni: [] as Campo[]
@@ -50,13 +50,14 @@ import axios from "axios";
     },
     methods: {
 
-        sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
+        async sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
 
-            this.map = {
-                orari: [""],
-                campiInterni: [] as Campo[],
-                campiEsterni: [] as Campo[]
-            }
+            if( this )
+                this.mappa = {
+                    orari: [""],
+                    campiInterni: [] as Campo[],
+                    campiEsterni: [] as Campo[]
+                }
 
 
             var mese = dataGiorno.getMonth() + 1 
@@ -65,7 +66,7 @@ import axios from "axios";
     
             if (!axios) return
 
-            axios.get(
+            await axios.get(
                 `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioniSlot/${dataToPass}`, //Impostare l'URL a cui collagarsi
                  {
                     headers: {
@@ -124,9 +125,9 @@ import axios from "axios";
                 })
                 
                 if(tipo === 'Interni')
-                    this.map.campiInterni.push(o)  
+                    this.mappa.campiInterni.push(o)
                 else
-                    this.map.campiEsterni.push(o)
+                    this.mappa.campiEsterni.push(o)
         },
 
         findFasceOrarie(risposta:any){ //funzione per popolare l'array contentente l'inizio di tutte le fasce orarie e l'orario di chiusura del circolo come ultimo elemento
@@ -145,12 +146,12 @@ import axios from "axios";
             var millisecSlot = risposta.payload.durataSlot * 60000
 
             var dateToConvert = new Date(current)
-            this.map.orari[0] = dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+            this.mappa.orari[0] = dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
             current += millisecSlot
 
             while(current <= final){
                 dateToConvert = new Date(current)
-                this.map.orari.push(dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
+                this.mappa.orari.push(dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
                 current += millisecSlot
             }
 
@@ -159,8 +160,8 @@ import axios from "axios";
 
     },
 
-    beforeMount(){ //Da fare prima di caricare la pagina
-          this.sendRequestToBack(new Date())
+    async beforeMount(){ //Da fare prima di caricare la pagina
+          await this.sendRequestToBack(new Date())
     //    this.findFasceOrarie(),
     //    this.createMap()
     },
