@@ -52,12 +52,11 @@ import axios from "axios";
 
         async sendRequestToBack(dataGiorno: Date){ //funzione per mandare la richiesta al back
 
-            if( this )
-                this.mappa = {
-                    orari: [""],
-                    campiInterni: [] as Campo[],
-                    campiEsterni: [] as Campo[]
-                }
+            this.mappa = {
+                orari: [""],
+                campiInterni: [] as Campo[],
+                campiEsterni: [] as Campo[]
+            }
 
 
             var mese = dataGiorno.getMonth() + 1 
@@ -125,9 +124,9 @@ import axios from "axios";
                 })
                 
                 if(tipo === 'Interni')
-                    this.mappa.campiInterni.push(o)
+                    this?.mappa.campiInterni.push(o)
                 else
-                    this.mappa.campiEsterni.push(o)
+                    this?.mappa.campiEsterni.push(o)
         },
 
         findFasceOrarie(risposta:any){ //funzione per popolare l'array contentente l'inizio di tutte le fasce orarie e l'orario di chiusura del circolo come ultimo elemento
@@ -151,7 +150,7 @@ import axios from "axios";
 
             while(current <= final){
                 dateToConvert = new Date(current)
-                this.mappa.orari.push(dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
+                this?.mappa.orari.push(dateToConvert.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
                 current += millisecSlot
             }
 
