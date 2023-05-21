@@ -98,7 +98,7 @@ export default {
 
         console.log(response)
 
-        const { success, message, token, dati } = response.data;
+        const { success, message, token, dati } = response.data.payload;
         const { email, nome, tipoAccount } = dati;
 
       
