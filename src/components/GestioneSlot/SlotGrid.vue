@@ -13,18 +13,11 @@ import ItemSlot, { Color } from './ItemSlot.vue';
 
         showModal(value:number, color: Color, campo: any){
 
-            console.log("asdfasdfsafsadsf")
-            console.log(  )
-
             // Configuro l'ora di inizio e fine slot usando la data attuale,
             // trovata dal prop, aggiungendo poi solo la data e l'ora dello slot a "value"
             // attuale
             const ora_inizio = this.orari[value].split(":").map((e: string) => parseInt(e))
             const ora_fine = this.orari[value+1].split(":").map((e: string) => parseInt(e))
-
-            console.log("ora_inizio")
-            console.log(ora_fine)
-            console.log()
 
             let data_inizio = new Date(this.$props.data)
             data_inizio.setHours( ora_inizio[0] )
@@ -44,8 +37,8 @@ import ItemSlot, { Color } from './ItemSlot.vue';
                 data_inizio,
                 data_fine,
                 color,
-                campo.id_campo,
-                id_partita
+                campo.idCampo,
+                id_partita,
             )
         }
 

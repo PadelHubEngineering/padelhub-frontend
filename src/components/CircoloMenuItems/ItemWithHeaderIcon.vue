@@ -29,7 +29,7 @@
         props: {
             links: Array as PropType<Array<{
                 nome: String,
-                href: String
+                link: String
             }>>
         },
         component: [
