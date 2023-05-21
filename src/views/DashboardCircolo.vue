@@ -4,7 +4,7 @@
     import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
     import DataPicker from "@/components/DataPicker.vue";
     import DataPickerVue from "@/components/DataPicker.vue";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 
 
 </script>
@@ -65,25 +65,27 @@ import axios from "axios";
     
             if (!axios) return
 
-            await axios.get(
-                `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioniSlot/${dataToPass}`, //Impostare l'URL a cui collagarsi
-                 {
-                    headers: {
-                        'x-access-token': this.$store.state.auth.token
+            let response: AxiosResponse | undefined;
+
+            try{
+                response = await axios.get(
+                    `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioniSlot/${dataToPass}`, //Impostare l'URL a cui collagarsi
+                    {
+                        headers: {
+                            'x-access-token': this.$store.state.auth.token
+                        }
                     }
-                 }
-            ).then(response => {
-
-                console.log(response)
-                this.findFasceOrarie(response.data)
-                this.createMap(response.data)
-      
-
-            }).catch( err => {
+                )
+            } catch( err: any ) {
                 const { message } = err.response.data;
                 console.log(message)
-            })
-            
+            }
+
+            console.log(response)
+            if ( response ) {
+                this.findFasceOrarie(response.data)
+                this.createMap(response.data)
+            }
         },
 
         createMap(risposta:any){
@@ -160,7 +162,7 @@ import axios from "axios";
     },
 
     async beforeMount(){ //Da fare prima di caricare la pagina
-          await this.sendRequestToBack(new Date())
+          await this.sendRequestToBack.apply(this, [ new Date() ])
     //    this.findFasceOrarie(),
     //    this.createMap()
     },
