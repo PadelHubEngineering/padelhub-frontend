@@ -21,6 +21,7 @@ import axios from "axios";
                 :orari="this.map.orari"
                 :campiInterni="this.map.campiInterni"
                 :campiEsterni="this.map.campiEsterni"
+                :data="this.date"
             ></SlotGrid>
         </div>
     </div>
@@ -116,7 +117,10 @@ import axios from "axios";
                     //Creo la chiave
                     var key: string = start.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
                 
-                    o.prenotazioni.set(key,  {color: colore})
+                    o.prenotazioni.set(key,  {
+                        color: colore,
+                        id_partita: prenotazione.partita
+                    })
                 })
                 
                 if(tipo === 'Interni')

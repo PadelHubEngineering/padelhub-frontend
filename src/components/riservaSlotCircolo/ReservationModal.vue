@@ -2,6 +2,7 @@
 
     import { computed, onMounted, ref, type Ref } from 'vue'
     import { Color } from '../GestioneSlot/ItemSlot.vue'
+    import QuickShowPartite from "../partite/QuickShowPartite.vue"
     import axios, { AxiosError } from 'axios'
     import { useStore } from 'vuex';
 
@@ -12,16 +13,18 @@
     var data_ora_fine = ref(new Date())
     var slot_color: Ref<Color | null> = ref(null)
     var req_error = ref("")
+    var id_partita = ref("")
 
     const dialog = ref<HTMLDialogElement>()
     const buttonStyle = ref("rounded-2xl p-2 border-solid border-bluPadelHub border-2")
 
 
-    function openModal(_data_ora_inizio: Date, _ora_fine: Date, color: Color, _id_campo: string, ) {
+    function openModal(_data_ora_inizio: Date, _ora_fine: Date, color: Color, _id_campo: string, _id_partita: string) {
         data_ora_inizio.value = _data_ora_inizio;
         data_ora_fine.value = _ora_fine;
         slot_color.value = color
         id_campo.value = _id_campo
+        id_partita.value = _id_partita
 
         dialog.value?.showModal()
     }
@@ -69,7 +72,7 @@
     })
 
     function dateToTime(date: Date) {
-        return `${date.getHours()}:${date.getMinutes()}`
+        return `${date.getHours().toString().padStart(2,"0")}:${date.getMinutes().toString().padStart(2,"0")}`
     }
 
     let isRosso = computed(() => {
@@ -91,8 +94,9 @@
     <dialog ref='dialog' class='rounded-2xl p-4'>
 
 
-        <div v-if="isRosso" class="flex flex-col">
+        <div v-if="isRosso" class="flex flex-col w-96">
             <h2>C'è già una partita a quanto pare</h2>
+            <QuickShowPartite :id_partita='id_partita'/>
         </div>
 
         <div class="flex flex-col" v-else-if='isVerde'>
