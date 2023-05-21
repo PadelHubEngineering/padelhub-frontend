@@ -110,7 +110,7 @@ export default {
         this.$store.commit(`auth/setToken`, token)
 
 
-        if (tipoAccount == TipoAccount.Gicocatore) { //E' un giocatore
+        if (tipoAccount == TipoAccount.Giocatore) { //E' un giocatore
           this.$router.push('/dashGiocatore')
         }
         else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo

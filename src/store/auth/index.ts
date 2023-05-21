@@ -5,7 +5,7 @@ import mutations from "./mutations"
 
 
 export enum TipoAccount {
-    Gicocatore = "Giocatore",
+    Giocatore = "Giocatore",
     Circolo = "Circolo",
     OperatoreCustomerService = "OperatoreCustomerService",
     Ammininstratore = "Amministratore"
