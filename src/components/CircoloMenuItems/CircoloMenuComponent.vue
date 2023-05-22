@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ref } from "vue";
-import StructureIcon from "../icons/StructureIcon.vue"
+    import StructureIcon from "../icons/StructureIcon.vue"
     import ItemWithHeaderIcon from "./ItemWithHeaderIcon.vue"
 
     const menu = ref([
