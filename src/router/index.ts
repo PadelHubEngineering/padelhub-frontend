@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/RegistrazioneCircolo',
       name: 'RegistrazioneCircolo',
       component: () => import('@/views/RegistrazioneCircolo.vue')
+    },
+    {
+      path: '/AreaCircolo',
+      name: 'AreaCircolo',
+      component: () => import('@/views/AreaCircolo.vue')
     }
   ],
   linkActiveClass: 'active'

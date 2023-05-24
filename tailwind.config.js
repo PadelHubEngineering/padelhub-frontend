@@ -2,7 +2,9 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}"
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
+    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
     extend: {
@@ -29,6 +31,8 @@ module.exports = {
       'circolo': '"KoHo", sans-serif'
     }
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+]
 }
 
