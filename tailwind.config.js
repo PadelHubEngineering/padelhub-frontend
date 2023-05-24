@@ -22,7 +22,7 @@ module.exports = {
       greenFree: 'rgb(198, 239, 144)',
       yellowReserved: 'rgb(251, 244, 94)',
       redBusy: 'rgb(248, 106, 106)',
-
+      graySlate: 'rgb(71 85 105)',
       simpleGrey: 'rgb(148, 163, 184)'
     },
     fontFamily: {

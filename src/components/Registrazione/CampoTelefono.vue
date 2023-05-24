@@ -1,11 +1,12 @@
 <template>
     <div class="field">
-        <div class="ui left icon input big">
-            <i class="user icon"></i>
-            <input type="text" placeholder="Telefono" autocomplete="off" v-model="input" @keyup="validateInput"
-                @blue="validateInput" />
+        <div>
+            <label for="CampoTelefono" class="block mb-2 text-sm font-medium">Inserisci il numero di telefono:</label>
+            <input type="text" name="telefono"
+                class="border border-graySlate sm:text-sm rounded-lg focus:ring-2 focus:border-bluPadelHub block w-full p-2.5"
+                autocomplete="off" v-model="input" @keyup="validateInput" @blue="validateInput" @input="$emit('update:modelValue', ($event!.target! as HTMLInputElement).value)">
         </div>
-        <div class="ui basic label pointing red" v-if="errors.telefono">
+        <div class="text-redBusy" v-if="errors.telefono">
             {{ errors.telefono }}
         </div>
     </div>
@@ -16,7 +17,7 @@ import { validateTelefonoField, errors } from "@/modules/formValidation";
 import { ref, computed } from "vue";
 let input = ref<string | null>(null);
 const validateInput = () => {
-   validateTelefonoField("telefono", input.value);
+    validateTelefonoField("telefono", input.value);
 };
 
 </script>

@@ -1,19 +1,18 @@
 import { file } from "@babel/types";
 
 export function isEmpty (fieldName: string, fieldValue: string | null) {
-    return !fieldValue ? "The " + fieldName + " field is required" : "";
+    return !fieldValue ? "Il campo " + fieldName + " è richiesto." : "";
 }
 
 export function minLength (fieldName: string, fieldValue: string | null, min: number) {
-    return fieldValue != null && fieldValue.length < min ? `The ${fieldName} field must be atleast ${min} characters long` : "";
+    return fieldValue != null && fieldValue.length < min ? `Il campo ${fieldName} deve avere almeno ${min} caratteri` : "";
 }
 
-export function isValidRegex (fieldName: string, fieldValue: string | null, regex: RegExp ) {
-    //let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return fieldValue != null && !regex.test(fieldValue) ? "The input is not a valid " + fieldName + " address" : "";
+export function isValidRegex (fieldName: string, fieldValue: string | null, regex: RegExp, requirements: string = "") {
+    return fieldValue != null && !regex.test(fieldValue) ? "Il campo " + fieldName + " non rispetta i requisiti. " + requirements: "";
 }
 
 export function isNum  (fieldName: string, fieldValue: string | null) {
     let isNum = fieldValue != null ? /^\d+$/.test(fieldValue) : false;
-    return !isNum ? "The " + fieldName + " field only have numbers" : "";
+    return !isNum ? "Il " + fieldName + " campo accetta solo numeri" : "";
 }

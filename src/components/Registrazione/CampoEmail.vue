@@ -1,11 +1,12 @@
 <template>
-    <div class="field">
-        <div class="ui left icon input big">
-            <i class="user icon"></i>
-            <input type="text" placeholder="e-mail" autocomplete="off" v-model="input" @keyup="validateInput"
-                @blue="validateInput" />
+    <div class="">
+        <div>
+            <label for="CampoEmail" class="block mb-2 text-sm font-medium">Inserisci l'email:</label>
+            <input type="text" name="email"
+                class="border border-graySlate sm:text-sm rounded-lg focus:ring-2 focus:border-bluPadelHub block w-full p-2.5"
+                autocomplete="off" v-model="input" @keyup="validateInput" @blue="validateInput" @input="$emit('update:modelValue', ($event!.target! as HTMLInputElement).value)">
         </div>
-        <div class="ui basic label pointing red" v-if="errors.email">
+        <div class="text-redBusy" v-if="errors.email">
             {{ errors.email }}
         </div>
     </div>
@@ -15,7 +16,6 @@
 import { validateEmailField, errors } from "@/modules/formValidation";
 import { ref, computed } from "vue";
 let input = ref<string | null>(null);
-//const { validateNameField, errors } = useFormValidation();
 const validateInput = () => {
     validateEmailField("email", input.value);
 };
