@@ -17,7 +17,7 @@ export function validatePasswordField(fieldName: string, fieldValue: string | nu
     errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isValidRegex(fieldName, fieldValue, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "8 caratteri - almeno una lettera maiuscola - almeno una minuscola - almeno un numero - almeno un carattere speciale")
 }
 export function validateConfirmPasswordField(fieldName: string, fieldValue: string | null, fieldValueConfirm: string | null) {
-    errors[fieldName] = fieldValue == fieldValueConfirm ? "" : "La password non corrisponde a quella inserita precedentemente."
+    errors[fieldName] = fieldValue != fieldValueConfirm ? "La password non corrisponde a quella inserita precedentemente." : undefined;
 }
 export { errors };
 

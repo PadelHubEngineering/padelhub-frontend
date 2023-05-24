@@ -10,18 +10,8 @@
                         <CampoNome v-model="user.name" />
                         <CampoEmail v-model="user.email" />
                         <CampoTelefono v-model="user.telefono" />
-                        <CampoPassword v-model="user.password" />
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="terms" aria-describedby="terms" type="checkbox"
-                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="terms" class="font-light text-gray-500 dark:text-gray-300">Accetto <a
-                                        class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                                        href="#">Termini e Condizioni</a></label>
-                            </div>
-                        </div>
+                        <CampoPassword v-model="user.password"/>
+                        <ConfermaPassword v-model="user.confPassword"/>
                         <button type="submit"
                             class="w-full text-white bg-bluPadelHub hover:bg-bluPadelHubHover focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:bg-graySlate"
                             @click="singupButtonPressed" :disabled="isSignupButtonDisabled">Crea Account</button>
@@ -33,7 +23,8 @@
                     </form>
                 </div>
                 <div v-else class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight">Ti è stata inviata una email con il link per confermare l'account.<br/>Clicca sul link per confermare l'account</h1>
+                    <h1 class="text-xl font-bold leading-tight tracking-tight">Ti è stata inviata una email con il link per
+                        confermare l'account.<br />Clicca sul link per confermare l'account</h1>
                 </div>
             </div>
         </div>
@@ -45,21 +36,26 @@ import CampoNome from "@/components/Registrazione/CampoNome.vue";
 import CampoEmail from "@/components/Registrazione/CampoEmail.vue";
 import CampoPassword from "@/components/Registrazione/CampoPassword.vue";
 import CampoTelefono from "@/components/Registrazione/CampoTelefono.vue";
+import ConfermaPassword from "@/components/Registrazione/ConfermaPassword.vue";
 import { errors } from "@/modules/formValidation";
 import useSubmitButtonState from "@/modules/submitButtonState"
 import axios from 'axios';
 import { TipoAccount } from '@/store/auth';
-import { reactive } from "vue";
-import { ref } from "vue";
+import { provide, reactive, ref } from "vue";
+import { validateConfirmPasswordField } from "@/modules/formValidation";
+import type ConfermaPasswordVue from "@/components/Registrazione/ConfermaPassword.vue";
 
 let toSubmit = ref(true);
-
 let user = reactive({
     name: "",
     email: "",
     telefono: "",
     password: "",
+    confPassword: ""
 });
+
+provide('userData', user) //per passarla al componente ConfermaPassword
+
 function singupButtonPressed() {
     toSubmit.value = false;
 
