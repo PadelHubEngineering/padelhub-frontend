@@ -16,7 +16,6 @@
 import { validateNameField, errors } from "@/modules/formValidation";
 import { ref, computed } from "vue";
 let input = ref<string | null>(null);
-//const { validateNameField, errors } = useFormValidation();
 const validateInput = () => {
     validateNameField("name", input.value);
 };
