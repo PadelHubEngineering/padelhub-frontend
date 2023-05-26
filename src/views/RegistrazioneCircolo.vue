@@ -22,6 +22,7 @@
                         </p>
                     </form>
                 </div>
+                <span v-if="responseError" class="text-invalidForm">{{ msg.error }}</span>
                 <div v-else class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight">Ti è stata inviata una email con il link per
                         confermare l'account.<br />Clicca sul link per confermare l'account</h1>
@@ -46,6 +47,7 @@ import { validateConfirmPasswordField } from "@/modules/formValidation";
 import type ConfermaPasswordVue from "@/components/Registrazione/ConfermaPassword.vue";
 
 let toSubmit = ref(true);
+let responseError: string;
 let user = reactive({
     name: "",
     email: "",
@@ -59,41 +61,26 @@ provide('userData', user) //per passarla al componente ConfermaPassword
 function singupButtonPressed() {
     toSubmit.value = false;
 
-    // //const axios: Axios | undefined = this.$axios as Axios;
-    // if (!axios) return
+    if (!axios) return
 
-    // axios.post(
-    //     `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
-    //     {
-    //         email: this.email,
-    //         password: this.password
-    //     }
-    // ).then(response => {
+    axios.post(
+        `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/registrazioneCircolo`,
+        {
+            nome: user.name,
+            email: user.email,
+            telefono: user.telefono,
+            password: user.password
+        }
+    ).then(response => {
 
-    //     console.log(response)
+        console.log(response)
 
-    //     const { success, message, token, dati } = response.data.payload;
-    //     const { email, nome, tipoAccount } = dati;
+        const { HTTPCode, success, message } = response.data.payload;
 
-
-    //     //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
-    //     this.$store.commit(`auth/setAuthenticated`, success)
-    //     this.$store.commit(`auth/setEmail`, email)
-    //     this.$store.commit(`auth/setNome`, nome)
-    //     this.$store.commit(`auth/setTipoAccount`, tipoAccount)
-    //     this.$store.commit(`auth/setToken`, token)
-
-
-    //     if (tipoAccount == TipoAccount.Giocatore) { //E' un giocatore
-    //         this.$router.push('/dashGiocatore')
-    //     }
-    //     else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo
-    //         this.$router.push('/dashCircolo')
-    //     }
-    // }).catch(err => {
-    //     const { message } = err.response.data;
-    //     this.msg['error'] = message
-    // })
+    }).catch(err => {
+        const { message } = err.response.data;
+        responseError = message
+    })
 
 }
 const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
