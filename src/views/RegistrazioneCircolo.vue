@@ -22,11 +22,12 @@
                         </p>
                     </form>
                 </div>
-                <span v-if="responseError" class="text-invalidForm">{{ msg.error }}</span>
+                <span v-else-if="responseError && toSubmit" class="text-invalidForm">{{ responseError }}</span>
                 <div v-else class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight">Ti è stata inviata una email con il link per
                         confermare l'account.<br />Clicca sul link per confermare l'account</h1>
                 </div>
+
             </div>
         </div>
     </section>
