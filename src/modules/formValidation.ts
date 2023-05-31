@@ -19,5 +19,9 @@ export function validatePasswordField(fieldName: string, fieldValue: string | nu
 export function validateConfirmPasswordField(fieldName: string, fieldValue: string | null, fieldValueConfirm: string | null) {
     errors[fieldName] = fieldValue != fieldValueConfirm ? "La password non corrisponde a quella inserita precedentemente." : undefined;
 }
+
+export function validateTimeField(fieldName: string, fieldValue: string | null) {
+    errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isValidRegex(fieldName, fieldValue, /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+}
 export { errors };
 
