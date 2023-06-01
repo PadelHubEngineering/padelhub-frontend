@@ -85,7 +85,7 @@
 
 <template>
 
-    <MobileHeader title='Gioca'/>
+    <MobileHeader :ready="true" title='Gioca'/>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="datiCircolo?.nome"/>
 

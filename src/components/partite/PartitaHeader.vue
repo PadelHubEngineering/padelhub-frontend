@@ -15,6 +15,6 @@
             <img src='/img/icona_indirizzo.png' width="32" height='32' class='mr-1'/>
             {{ props.nomeCircolo || "" }}
         </div>
-        <i @if="iscritto" class='flex items-center text-xl'> Iscritto </i>
+        <i v-if="iscritto" class='flex items-center text-xl'> Iscritto </i>
     </div>
 </template>

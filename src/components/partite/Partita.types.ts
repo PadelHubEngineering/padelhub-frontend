@@ -21,7 +21,8 @@ export type GiocatoreRetI = {
     nome: string,
     cognome: string,
     nickname: string,
-    foto: string
+    foto: string,
+    email: string
 }
 
 export type PartiteAperteI = {

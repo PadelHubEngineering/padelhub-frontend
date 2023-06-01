@@ -1,6 +1,6 @@
 
 <script setup lang='ts'>
-    import { useRoute } from 'vue-router';
+    import { useRoute, useRouter } from 'vue-router';
     import PartitaHeader from "../components/partite/PartitaHeader.vue"
     import PartitaHeaderInfo from "../components/partite/PartitaHeaderInfo.vue"
     import VisualizzatoreGiocatori from "@/components/partite/VisualizzatoreGiocatori.vue"
@@ -13,13 +13,18 @@
 
 
     const route = useRoute()
+    const router = useRouter()
     const store = useStore();
 
     const { idPartita } = route.params
 
+    const bottomButtonClass = 'p-3 ml-auto mr-3 rounded-2xl text-2xl text-white flex flex-col justify-center'.split(" ")
+
 
     const partita: Ref<PartitaRetI | undefined> = ref(undefined)
     const isIscritto = ref(false)
+
+    const needConfirmation = ref(true)
 
     async function loadPartita() {
         if( idPartita instanceof Array || idPartita === "" ) return
@@ -95,15 +100,32 @@
         return partita.value.giocatori.map( e => e.foto )
     })
 
+    const isPartecipante = computed( () => {
+        if( !partita.value ) return undefined
+
+        return partita.value.giocatori.filter(g => g.email === store.state.auth.email)
+    } )
+
     function pay() {
-        window.alert("Paghiamo")
+        console.log("Paghiamo")
+    }
+
+    function annullaPrenotazione() {
+        if ( needConfirmation.value )
+            needConfirmation.value = false
+        else
+            console.log("Annulliamo lol")
     }
 
 </script>
 
 <template>
 
-    <MobileHeader title='Partecipa'/>
+    <MobileHeader :ready="!!partita" :title='isPartecipante ? "Modifica partita": "Partecipa"'>
+        <template v-slot:leftSide>
+            <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
+        </template>
+    </MobileHeader>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="nomeCircolo"/>
     <PartitaHeaderInfo :dataOraInizioPartita="oraInizioPartita" :oraFinePartita="oraFinePartita" :tipoCampo="partita?.tipoCampo"/>
@@ -111,8 +133,26 @@
 
     <VisualizzatoreGiocatori :usersImgs="usersImgs"/>
 
-    <div class='w-full absolute bottom-2' @on:click.prevent="pay">
-        <button class='p-3 ml-auto mr-3 bg-bluPadelHub rounded-2xl text-2xl text-white flex flex-col justify-center'>
+    <div v-if='isPartecipante' class='w-full absolute bottom-2 flex justify-between' >
+
+
+        <div v-if='isPartecipante && !needConfirmation' class='text-lg px-4'>Sicuro di voler annullare la prenotazione?</div>
+
+        <div v-else class='text-lg px-4'></div>
+
+
+        <button v-if='isPartecipante'
+            :class="[ { 'bg-bluPadelHub': needConfirmation, 'bg-redBusy': !needConfirmation}, bottomButtonClass ]"
+            v-on:click.prevent="annullaPrenotazione"
+        >
+            <span>Rinuncia</span>
+        </button>
+
+        <button v-else
+            :class="[ { 'bg-bluPadelHub': needConfirmation, 'bg-redBusy': !needConfirmation}, bottomButtonClass ]"
+            v-on:click.prevent="pay"
+            class='p-3 ml-auto mr-3 rounded-2xl text-2xl text-white flex flex-col justify-center'
+        >
             <span>Partecipa</span>
             <span class='text-right w-full pr-1'>{{ partita?.circolo?.costoPrenotazione }} €</span>
         </button>
