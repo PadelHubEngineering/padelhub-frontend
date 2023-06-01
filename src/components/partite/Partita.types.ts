@@ -25,9 +25,10 @@ export type GiocatoreRetI = {
 }
 
 export type PartiteAperteI = {
-
     giaPrenotato: boolean,
-    partite: PartitaRetI[]
+    partite: PartitaRetI[],
+    circolo: CircoloRetI,
+    isAffiliato: boolean
 }
 
 function getLivello(n: number) {

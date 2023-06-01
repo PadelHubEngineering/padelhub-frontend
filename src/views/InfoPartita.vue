@@ -103,7 +103,7 @@
 
 <template>
 
-    <MobileHeader title='Gioca'/>
+    <MobileHeader title='Partecipa'/>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="nomeCircolo"/>
     <PartitaHeaderInfo :dataOraInizioPartita="oraInizioPartita" :oraFinePartita="oraFinePartita" :tipoCampo="partita?.tipoCampo"/>
