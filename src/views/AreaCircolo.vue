@@ -16,7 +16,7 @@
                 <CampoTelefono v-model="data.anagrafica.telefono" :val="data.anagrafica.telefono"></CampoTelefono>
                 <CampoEmail v-model="data.anagrafica.email" :val="data.anagrafica.email"></CampoEmail>
                 <Input placeholder="Inserisci la Partita Iva" label="Partita Iva | Codice Fiscale"
-                    v-model="data.anagrafica.partitaIVA" @change="logData"/>
+                    v-model="data.anagrafica.partitaIVA" @change="logData" />
                 <div></div>
                 <hr class="col-span-2 w-48 h-1 mx-auto my-4 bg-bluPadelHub border-0 rounded">
                 <div class="col-span-2 place-items-center">
@@ -24,14 +24,12 @@
                         Partite e Campi</h1>
                 </div>
                 <div class="grid grid-cols-3 px-5 py-5 gap-5">
-                    <select class="col-span-3" v-model="selected">
-                        <option value="Tutti i giorni">Tutti i giorni</option>
-                        <option v-for="item in days">{{ item }}</option>
-                    </select>
                     <div>Orari</div>
                     <div>Apertura</div>
                     <div>Chiusura</div>
-                    <AperturaChiusura @orari="getOrari" :giorno=selected :key="selected" />
+                    <AperturaChiusura class="col-span-3" @orari="getOrari" :giorno=item :key="item" v-for="item in days"
+                        :apertura="data.struttura.orariStruttura[days.indexOf(item)].orarioApertura"
+                        :chiusura="data.struttura.orariStruttura[days.indexOf(item)].orarioChiusura" />
                 </div>
                 <div class="grid grid-cols-3 px-5 py-5 gap-5">
                     <div></div>
@@ -46,8 +44,10 @@
                     <Input size="sm" v-model="data.struttura.quotaAffiliazione" />
                 </div>
                 <div class="grid grid-cols-2 px-5 py-5 gap-5 place-items-center">
-                    <NumeroCampi tipoCampo="Interno" v-model="data.struttura.nCampiInterni" :val="data.struttura.nCampiInterni"></NumeroCampi>
-                    <NumeroCampi tipoCampo="Esterno" v-model="data.struttura.nCampiEsterni" :val="data.struttura.nCampiEsterni"></NumeroCampi>
+                    <NumeroCampi tipoCampo="Interno" v-model="data.struttura.nCampiInterni"
+                        :val="data.struttura.nCampiInterni"></NumeroCampi>
+                    <NumeroCampi tipoCampo="Esterno" v-model="data.struttura.nCampiEsterni"
+                        :val="data.struttura.nCampiEsterni"></NumeroCampi>
                 </div>
                 <div class="grid place-center">
                     <div class="">
@@ -85,7 +85,7 @@
                         <Button class="bg-bluPadelHub" @click="addServizio">Aggiungi servizio</Button>
                     </div>
                 </div>
-                <Button class="col-span-2">Effettua Modifiche</Button>
+                <Button class="col-span-2" @click="submitValues">Effettua Modifiche</Button>
             </div>
         </div>
     </div>
@@ -97,6 +97,7 @@ import NumeroCampi from '@/components/AreaCircolo/NumeroCampi.vue';
 import CampoTelefono from '@/components/Registrazione/CampoTelefono.vue';
 import CampoNome from '@/components/Registrazione/CampoNome.vue';
 import CampoEmail from '@/components/Registrazione/CampoEmail.vue';
+import CampoOra from '@/components/AreaCircolo/CampoOra.vue';
 import { Carousel, Button, Input, ListGroup, ListGroupItem, ButtonGroup } from 'flowbite-vue'
 import AperturaChiusura from '@/components/AreaCircolo/AperturaChiusura.vue';
 import { reactive, ref, defineProps, onMounted, onUpdated } from 'vue';
@@ -104,6 +105,7 @@ import { anyTypeAnnotation, validate } from '@babel/types';
 import axios from 'axios';
 import { useStore } from "vuex";
 import { getCurrentInstance } from 'vue'
+import { computed } from 'vue';
 
 const instance = getCurrentInstance();
 
@@ -128,44 +130,44 @@ let data = reactive({
             {
                 giorno: 0,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 1,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 2,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 3,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 4,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 5,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
             {
                 giorno: 6,
                 isAperto: false,
-                apertura: "",
-                chiusura: ""
+                orarioApertura: "",
+                orarioChiusura: ""
             },
         ],
         durataSlot: 60,
@@ -208,28 +210,38 @@ function removeService(key: any) {
 function getOrari(value: any) {
     data.struttura.orariStruttura[days.indexOf(value["giorno"])].giorno = days.indexOf(value["giorno"])
     data.struttura.orariStruttura[days.indexOf(value["giorno"])].isAperto = value["isAperto"]
-    data.struttura.orariStruttura[days.indexOf(value["giorno"])].apertura = value["apertura"]
-    data.struttura.orariStruttura[days.indexOf(value["giorno"])].chiusura = value["chiusura"]
+    data.struttura.orariStruttura[days.indexOf(value["giorno"])].orarioApertura = value["apertura"]
+    data.struttura.orariStruttura[days.indexOf(value["giorno"])].orarioChiusura = value["chiusura"]
+    console.log(data.struttura.orariStruttura)
 }
 
-function submitValues() {
+async function submitValues() {
+    try{
+        data.struttura.durataSlot = Number(data.struttura.durataSlot);
+        data.struttura.nCampiEsterni = Number(data.struttura.nCampiEsterni)
+        data.struttura.nCampiInterni = Number(data.struttura.nCampiInterni)
+        data.struttura.prezzoSlotOrario = Number(data.struttura.prezzoSlotOrario)
+        data.struttura.quotaAffiliazione = Number(data.struttura.quotaAffiliazione)
+        data.struttura.scontoAffiliazione = Number(data.struttura.scontoAffiliazione)
+    }
+    catch{}
+
+    console.log("Submitted")
     if (!axios) return
-
+    const resp = Object.assign(data, { token : store.state.auth.token })
+    console.log(resp)
     axios.post(
-        `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/`,
-        data
+        `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/inserimentoDatiCircolo`, resp
     ).then(response => {
-
         console.log(response)
-
         const { HTTPCode, success, message } = response.data.payload;
-
     }).catch(err => {
         const { message } = err.response.data;
+        console.log(message)
         responseError = message
     })
 }
-function logData(){
+function logData() {
     console.log(data)
 }
 </script>
