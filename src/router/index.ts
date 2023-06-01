@@ -22,6 +22,16 @@ const router = createRouter({
       path: '/dashCircolo',
       name: 'DashboardCircolo',
       component: () => import('../views/DashboardCircolo.vue')
+    },
+    {
+      path: '/partite/circolo/:circolo/data/:year/:month/:day/:hour/:minutes/',
+      name: "PartiteSlot",
+      component: () => import('../views/ListaPartiteSlot.vue')
+    },
+    {
+      path: '/partita/:idPartita/',
+      name: "InfoPartita",
+      component: () => import('../views/InfoPartita.vue')
     }
   ],
   linkActiveClass: 'active'
