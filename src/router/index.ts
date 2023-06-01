@@ -22,6 +22,21 @@ const router = createRouter({
       path: '/dashCircolo',
       name: 'DashboardCircolo',
       component: () => import('../views/DashboardCircolo.vue')
+    },
+    {
+      path: '/RegistrazioneCircolo',
+      name: 'RegistrazioneCircolo',
+      component: () => import('@/views/RegistrazioneCircolo.vue')
+    },
+    {
+      path: '/RegistrazioneGiocatore',
+      name: 'RegistrazioneGiocatore',
+      component: () => import('@/views/RegistrazioneGiocatore.vue')
+    },
+    {
+      path: '/AreaCircolo',
+      name: 'AreaCircolo',
+      component: () => import('@/views/AreaCircolo.vue')
     }
   ],
   linkActiveClass: 'active'

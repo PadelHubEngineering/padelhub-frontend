@@ -4,16 +4,16 @@
     <br><br>
     <form @submit.prevent="handleSubmission" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
-      <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"    
+      <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
         class="invalid:border-invalidForm  invalid:text-invalidForm 
-         focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+               focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         v-model="email" required> <br>
       <span v-if="msg.email" class="italic text-xs">{{ msg.email }}</span>
       <br>
       <label for="password" class="font-bold text-bluPadelHub">Password</label>
       <input type="password" pattern="[A-Za-z\d@$!%*?&]{1,30}"
         class="border-bluPadelHub invalid:border-invalidForm  invalid:text-invalidForm 
-         focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
+               focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
         v-model="password" required><br>
       <span v-if="msg.password" class="italic text-xs">{{ msg.password }}</span>
       <br>
@@ -90,10 +90,10 @@ export default {
 
       axios.post(
         `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
-         {
+        {
           email: this.email,
           password: this.password
-         }
+        }
       ).then(response => {
 
         console.log(response)
@@ -101,7 +101,7 @@ export default {
         const { success, message, token, dati } = response.data.payload;
         const { email, nome, tipoAccount } = dati;
 
-      
+
         //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
         this.$store.commit(`auth/setAuthenticated`, success)
         this.$store.commit(`auth/setEmail`, email)
@@ -116,9 +116,7 @@ export default {
         else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo
           this.$router.push('/dashCircolo')
         }
-
-
-      }).catch( err => {
+      }).catch(err => {
         const { message } = err.response.data;
         this.msg['error'] = message
       })
