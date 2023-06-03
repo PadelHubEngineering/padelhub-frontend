@@ -35,7 +35,7 @@
                 <div class="grid grid-cols-3 px-5 py-5 gap-5">
                     <div></div>
                     <div>Standard</div>
-                    <div>Iscritto</div>
+                    <div>Sconto Iscritti (%)</div>
 
                     <div>Prezzi/partita</div>
                     <Input size="sm" v-model="data.struttura.prezzoSlotOrario" />
