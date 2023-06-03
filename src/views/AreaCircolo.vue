@@ -29,8 +29,8 @@
                     <div>Chiusura</div>
                     <AperturaChiusura class="col-span-3" @orari="getOrari" :giorno=item :key="item" v-for="item in days"
                         :apertura="data.struttura.orariStruttura[days.indexOf(item)].orarioApertura"
-                        :chiusura="data.struttura.orariStruttura[days.indexOf(item)].orarioChiusura" 
-                        :isAperto="data.struttura.orariStruttura[days.indexOf(item)].isAperto"/>
+                        :chiusura="data.struttura.orariStruttura[days.indexOf(item)].orarioChiusura"
+                        :isAperto="data.struttura.orariStruttura[days.indexOf(item)].isAperto" />
                 </div>
                 <div class="grid grid-cols-3 px-5 py-5 gap-5">
                     <div></div>
@@ -45,9 +45,9 @@
                     <Input size="sm" v-model="data.struttura.quotaAffiliazione" />
                 </div>
                 <div class="grid grid-cols-2 px-5 py-5 gap-5 place-items-center">
-                    <NumeroCampi tipoCampo="Interno" v-model="data.struttura.nCampiInterni"
+                    <NumeroCampi tipoCampo="Interno" @nCampi="(val) => data.struttura.nCampiInterni = val"
                         :val="data.struttura.nCampiInterni"></NumeroCampi>
-                    <NumeroCampi tipoCampo="Esterno" v-model="data.struttura.nCampiEsterni"
+                    <NumeroCampi tipoCampo="Esterno" @nCampi="(val) => data.struttura.nCampiEsterni = val"
                         :val="data.struttura.nCampiEsterni"></NumeroCampi>
                 </div>
                 <div class="grid place-center">
@@ -217,7 +217,7 @@ function getOrari(value: any) {
 }
 
 async function submitValues() {
-    try{
+    try {
         data.struttura.durataSlot = Number(data.struttura.durataSlot);
         data.struttura.nCampiEsterni = Number(data.struttura.nCampiEsterni)
         data.struttura.nCampiInterni = Number(data.struttura.nCampiInterni)
@@ -225,11 +225,11 @@ async function submitValues() {
         data.struttura.quotaAffiliazione = Number(data.struttura.quotaAffiliazione)
         data.struttura.scontoAffiliazione = Number(data.struttura.scontoAffiliazione)
     }
-    catch{}
+    catch { }
 
     console.log("Submitted")
     if (!axios) return
-    const resp = Object.assign(data, { token : store.state.auth.token })
+    const resp = Object.assign(data, { token: store.state.auth.token })
     console.log(resp)
     axios.post(
         `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/inserimentoDatiCircolo`, resp

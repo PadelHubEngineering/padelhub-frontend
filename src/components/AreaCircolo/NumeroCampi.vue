@@ -22,12 +22,18 @@ onUpdated(() => {
         numeroCampi.value = props.val!
     countUpdate++
 })
+
+const emit = defineEmits(['nCampi'])
+
+
 function aggiungiCampo(){
     numeroCampi.value++;
+    emit("nCampi", numeroCampi.value)
 }
 function togliCampo(){
     if(numeroCampi.value != 0)
         numeroCampi.value--;
+    emit("nCampi", numeroCampi.value)
 }
 </script>
 
