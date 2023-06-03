@@ -29,7 +29,8 @@
                     <div>Chiusura</div>
                     <AperturaChiusura class="col-span-3" @orari="getOrari" :giorno=item :key="item" v-for="item in days"
                         :apertura="data.struttura.orariStruttura[days.indexOf(item)].orarioApertura"
-                        :chiusura="data.struttura.orariStruttura[days.indexOf(item)].orarioChiusura" />
+                        :chiusura="data.struttura.orariStruttura[days.indexOf(item)].orarioChiusura" 
+                        :isAperto="data.struttura.orariStruttura[days.indexOf(item)].isAperto"/>
                 </div>
                 <div class="grid grid-cols-3 px-5 py-5 gap-5">
                     <div></div>

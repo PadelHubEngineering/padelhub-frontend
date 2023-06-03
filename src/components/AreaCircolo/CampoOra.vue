@@ -25,7 +25,7 @@ onUpdated(() => {
     //console.log(props.val)
     if (countUpdate == 0){
         let date = new Date(props.val!);
-        orario.value = `${date.getHours()}:${date.getMinutes()}`
+        orario.value = `${date.getHours() != 0 ? date.getHours()-1 : "23" }:${date.getMinutes() != 0 ? date.getMinutes() : '00'}`
     }
     countUpdate++
 })
