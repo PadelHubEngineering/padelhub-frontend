@@ -87,6 +87,27 @@
                     </div>
                 </div>
                 <Button class="col-span-2" @click="submitValues">Effettua Modifiche</Button>
+                <Modal size="xs" v-if="isShowModal" @close="closeModal">
+                    <template #header>
+                        <div class="flex items-center text-lg">
+                            Modifica dati circolo
+                        </div>
+                    </template>
+                    <template #body>
+
+                        <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            {{ statusMessage }}
+                        </p>
+                    </template>
+                    <template #footer>
+                        <div class="flex justify-between">
+                            <button @click="closeModal" type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Chiudi
+                            </button>
+                        </div>
+                    </template>
+                </Modal>
             </div>
         </div>
     </div>
@@ -99,7 +120,7 @@ import CampoTelefono from '@/components/Registrazione/CampoTelefono.vue';
 import CampoNome from '@/components/Registrazione/CampoNome.vue';
 import CampoEmail from '@/components/Registrazione/CampoEmail.vue';
 import CampoOra from '@/components/AreaCircolo/CampoOra.vue';
-import { Carousel, Button, Input, ListGroup, ListGroupItem, ButtonGroup } from 'flowbite-vue'
+import { Carousel, Button, Input, ListGroup, ListGroupItem, ButtonGroup, Modal } from 'flowbite-vue'
 import AperturaChiusura from '@/components/AreaCircolo/AperturaChiusura.vue';
 import { reactive, ref, defineProps, onMounted, onUpdated } from 'vue';
 import { anyTypeAnnotation, validate } from '@babel/types';
@@ -117,6 +138,8 @@ const duration = [60, 90, 120]
 let selected = ref();
 let inputServizi = ref(null);
 let responseError: string;
+let isShowModal = ref(false)
+let statusMessage = ref("")
 
 let data = reactive({
     anagrafica: {
@@ -235,12 +258,17 @@ async function submitValues() {
         `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/inserimentoDatiCircolo`, resp
     ).then(response => {
         console.log(response)
-        const { HTTPCode, success, message } = response.data.payload;
+        const { HTTPCode, success, message } = response.data;
+        statusMessage = message
+        isShowModal.value = true;
     }).catch(err => {
         const { message } = err.response.data;
         console.log(message)
         responseError = message
     })
+}
+function closeModal(){
+    isShowModal.value = false
 }
 function logData() {
     console.log(data)
