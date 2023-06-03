@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ifStatement, regExpLiteral } from '@babel/types';
+import { booleanLiteral, ifStatement, is, regExpLiteral } from '@babel/types';
 import { Carousel, Button, Input } from 'flowbite-vue'
 import { onUpdated, ref } from 'vue';
 import { errors, validateTimeField } from '@/modules/formValidation';
@@ -24,6 +24,7 @@ const props = defineProps({
     giorno: String,
     apertura: String,
     chiusura: String,
+    isAperto: Boolean
 })
 const emit = defineEmits(['orari'])
 
@@ -31,6 +32,7 @@ onUpdated(() => {
     if (countUpdate == 0) {
         apertura.value = props.apertura!;
         chiusura.value = props.chiusura!;
+        isAperto.value = props.isAperto!;
     }
     countUpdate++;
 })
