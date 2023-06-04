@@ -60,7 +60,7 @@
             console.log(message)
         }
 
-        console.log(response)
+    
         if ( response ) {
             findFasceOrarie(response.data)
             createMap(response.data)
