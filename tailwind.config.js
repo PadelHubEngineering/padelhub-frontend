@@ -2,7 +2,9 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}"
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
+    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
     extend: {
@@ -22,13 +24,15 @@ module.exports = {
       greenFree: 'rgb(198, 239, 144)',
       yellowReserved: 'rgb(251, 244, 94)',
       redBusy: 'rgb(248, 106, 106)',
-
+      graySlate: 'rgb(71 85 105)',
       simpleGrey: 'rgb(148, 163, 184)'
     },
     fontFamily: {
       'circolo': '"KoHo", sans-serif'
     }
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+]
 }
 
