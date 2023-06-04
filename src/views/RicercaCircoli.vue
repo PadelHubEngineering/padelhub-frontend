@@ -1,9 +1,8 @@
 <template>
-
     <div class="sticky top-0 bg-white">
         <MobileHeader :ready="true" title='Gioca'>
             <template v-slot:rightSide>
-                <img src='/img/logoPadelHub.png' class='h-5/6'/>
+                <img src='/img/logoPadelHub.png' class='h-5/6' />
             </template>
         </MobileHeader>
 
@@ -11,17 +10,18 @@
         <p v-for="luoghi in risultati"> {{ luoghi.label }}></p> -->
         <div class="mt-8 mb-5">
             <div class="searchInput active border-2 border-bluPadelHub rounded-lg font-circolo">
-                <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti"/>
+                <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti" />
                 <div class="resultBox">
                     <!-- here list are inserted from javascript -->
-                    <li v-for="luoghi in risultati" :key="luoghi" @click="handleRicerca(luoghi)"> {{ luoghi.label }} </li> 
+                    <li v-for="luoghi in risultati" :key="luoghi" @click="handleRicerca(luoghi)"> {{ luoghi.label }} </li>
                 </div>
                 <div class="icon"><i class="fas fa-search"></i></div>
             </div>
             <div class="ml-10 mt-3">
                 <DataPicker @update="updateDate"></DataPicker>
             </div>
-            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg" @click="ricercaCircoli">CERCA</button>
+            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg disabled:bg-bluPadelHubHover"
+                @click="ricercaCircoli" :disabled="!cliccatoSuggestion">CERCA</button>
         </div>
     </div>
 
@@ -29,10 +29,10 @@
     <!-- SABRINA -->
     <div class="bg-ricercaCircoli  p-0 pt-1 bg-fixed">
         <div v-for="circolo in circoliTrovati">
-            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi"></ItemCircoloTrovato>
-        </div> 
+            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi">
+            </ItemCircoloTrovato>
+        </div>
     </div>
-
 </template>
 
 
@@ -54,8 +54,8 @@ import CampoBgIcon from '@/components/icons/CampoBgIcon.vue';
 const store = useStore()
 
 
-    // const provider = new OpenStreetMapProvider();
-    const searchProvider = new BingProvider({
+// const provider = new OpenStreetMapProvider();
+const searchProvider = new BingProvider({
     params: {
         key: import.meta.env.VITE_BING_MAP_KEY,
     },
@@ -69,31 +69,61 @@ const store = useStore()
 
     var circoliTrovati: Ref<circoloTrovato[]> = ref([])
 
-    let input = ref()
-    let risultati = reactive({})
-    let isFree = 0;
-    let data:string;
+const circoliTrovati = [
+    {
+        nomeCircolo: "Beppone",
+        iscritto: true,
+        campi: [TipoCampo.Esterno, TipoCampo.Interno]
+    },
+    {
+        nomeCircolo: "WPadel",
+        iscritto: true,
+        campi: [TipoCampo.Esterno]
+    },
+    {
+        nomeCircolo: "InPadelWeHub",
+        iscritto: true,
+        campi: [TipoCampo.Interno]
 
-    async function updateDate(dataValue:Date) {
-        let mese = dataValue.getMonth() + 1
-        data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0') 
     }
+]
 
-    async function handleSuggerimenti() {
-        if (isFree <= 20) {
-            isFree++
-            const results = await searchProvider.search({ query: input.value });
-            Object.assign(risultati, results)
-            isFree--
-        }
-        console.log(risultati)
-    }
-    async function handleRicerca(key: any) {
-        console.log(key)
-        input.value = key.label
-    }
 
-    async function ricercaCircoli(){
+let input = ref()
+let risultati = reactive({})
+let cliccatoSuggestion = ref(false)
+let isFree = 0;
+let data: string;
+let location = {
+    x: null,
+    y: null
+}
+
+async function updateDate(dataValue: Date) {
+    let mese = dataValue.getMonth() + 1
+    data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
+}
+
+async function handleSuggerimenti() {
+    cliccatoSuggestion.value = false
+    if (isFree <= 20) {
+        isFree++
+        const results = await searchProvider.search({ query: input.value });
+        Object.assign(risultati, results)
+        isFree--
+    }
+    //console.log(risultati)
+}
+async function handleRicerca(key: any) {
+    console.log(key)
+    input.value = key.label
+    location.x = key.x
+    location.y = key.y
+    cliccatoSuggestion.value = true
+    risultati = reactive({})
+}
+
+async function ricercaCircoli(){
 
         circoliTrovati.value = [] 
 
@@ -144,8 +174,8 @@ const store = useStore()
 
     }
 
-    onMounted(()=>{
-        updateDate(new Date())
-    })
+onMounted(() => {
+    updateDate(new Date())
+})
 
 </script>
