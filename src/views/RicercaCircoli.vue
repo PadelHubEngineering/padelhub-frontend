@@ -27,10 +27,9 @@
 
 
     <!-- SABRINA -->
-    <div class="bg-ricercaCircoli  p-0 pt-1 bg-fixed">
+    <div class="bg-gradient-to-r from-bluPadelHub to-arancio p-0 pt-1 bg-fixed h-screen bg-no-repeat bg-bottom">
         <div v-for="circolo in circoliTrovati">
-            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi">
-            </ItemCircoloTrovato>
+            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi"></ItemCircoloTrovato>
         </div>
     </div>
 </template>
@@ -69,61 +68,41 @@ const searchProvider = new BingProvider({
 
     var circoliTrovati: Ref<circoloTrovato[]> = ref([])
 
-const circoliTrovati = [
-    {
-        nomeCircolo: "Beppone",
-        iscritto: true,
-        campi: [TipoCampo.Esterno, TipoCampo.Interno]
-    },
-    {
-        nomeCircolo: "WPadel",
-        iscritto: true,
-        campi: [TipoCampo.Esterno]
-    },
-    {
-        nomeCircolo: "InPadelWeHub",
-        iscritto: true,
-        campi: [TipoCampo.Interno]
 
+    let input = ref()
+    let risultati = reactive({})
+    let cliccatoSuggestion = ref(false)
+    let isFree = 0;
+    let data: string;
+    let location = {
+        x: null,
+        y: null
     }
-]
 
-
-let input = ref()
-let risultati = reactive({})
-let cliccatoSuggestion = ref(false)
-let isFree = 0;
-let data: string;
-let location = {
-    x: null,
-    y: null
-}
-
-async function updateDate(dataValue: Date) {
-    let mese = dataValue.getMonth() + 1
-    data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
-}
-
-async function handleSuggerimenti() {
-    cliccatoSuggestion.value = false
-    if (isFree <= 20) {
-        isFree++
-        const results = await searchProvider.search({ query: input.value });
-        Object.assign(risultati, results)
-        isFree--
+    async function updateDate(dataValue: Date) {
+        let mese = dataValue.getMonth() + 1
+        data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
     }
-    //console.log(risultati)
-}
-async function handleRicerca(key: any) {
-    console.log(key)
-    input.value = key.label
-    location.x = key.x
-    location.y = key.y
-    cliccatoSuggestion.value = true
-    risultati = reactive({})
-}
 
-async function ricercaCircoli(){
+    async function handleSuggerimenti() {
+        cliccatoSuggestion.value = false
+        if (isFree <= 20) {
+            isFree++
+            const results = await searchProvider.search({ query: input.value });
+            Object.assign(risultati, results)
+            isFree--
+        }
+    }
+    async function handleRicerca(key: any) {
+        console.log(key)
+        input.value = key.label
+        location.x = key.x
+        location.y = key.y
+        cliccatoSuggestion.value = true
+        risultati = reactive({})
+    }
+
+    async function ricercaCircoli(){
 
         circoliTrovati.value = [] 
 
@@ -141,6 +120,7 @@ async function ricercaCircoli(){
                 }
             )
 
+            console.log(response)
 
         } catch( err: any ) {
             console.log(err)
@@ -159,8 +139,8 @@ async function ricercaCircoli(){
                 let esterni = 0
 
                 circolo.campi.forEach((campo:any) => {
-                    if(campo.Tipologia === 'Interno') interni++;
-                    if(campo.Tipologia === 'Esterno') esterni++; 
+                    if(campo.tipologia === 'Interno') interni++;
+                    if(campo.tipologia === 'Esterno') esterni++; 
                 })
 
                 if(interni>0) circoloTrovato.campi.push(TipoCampo.Interno)
