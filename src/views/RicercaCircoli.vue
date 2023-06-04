@@ -19,9 +19,9 @@
                 <div class="icon"><i class="fas fa-search"></i></div>
             </div>
             <div class="ml-10 mt-3">
-                <DataPicker></DataPicker>
+                <DataPicker @update="updateDate"></DataPicker>
             </div>
-            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg">CERCA</button>
+            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg" @click="ricercaCircoli">CERCA</button>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
 
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed, onMounted } from 'vue';
 import '../assets/searchSuggestion.css'
 import { BingProvider } from 'leaflet-geosearch';
 import { Input } from 'flowbite-vue'
@@ -47,50 +47,92 @@ import { TipoCampo } from '@/components/RicercaCircoli/TipoCampo.types';
 import ItemCircoloTrovato from '@/components/RicercaCircoli/ItemCircoloTrovato.vue';
 import MobileHeader from '@/components/MobileHeader.vue'
 import DataPicker from '@/components/DataPicker.vue';
+import axios, { type AxiosResponse } from "axios";
+import { useStore } from "vuex";
 
-// const provider = new OpenStreetMapProvider();
-const searchProvider = new BingProvider({
-  params: {
-    key: import.meta.env.VITE_BING_MAP_KEY,
-  },
-});
+const store = useStore()
 
-const circoliTrovati = [
-    {
-        nomeCircolo: "Beppone",
-        iscritto: true,
-        campi: [TipoCampo.Esterno, TipoCampo.Interno]
+
+    // const provider = new OpenStreetMapProvider();
+    const searchProvider = new BingProvider({
+    params: {
+        key: import.meta.env.VITE_BING_MAP_KEY,
     },
-    {
-        nomeCircolo: "WPadel",
-        iscritto: true,
-        campi: [TipoCampo.Esterno]
-    },
-    {
-        nomeCircolo: "InPadelWeHub",
-        iscritto: true,
-        campi: [TipoCampo.Interno]
+    });
+
+    const circoliTrovati = [
+        {
+            nomeCircolo: "Beppone",
+            iscritto: true,
+            campi: [TipoCampo.Esterno, TipoCampo.Interno]
+        },
+        {
+            nomeCircolo: "WPadel",
+            iscritto: true,
+            campi: [TipoCampo.Esterno]
+        },
+        {
+            nomeCircolo: "InPadelWeHub",
+            iscritto: true,
+            campi: [TipoCampo.Interno]
+
+        }
+    ]
+
+
+    let input = ref()
+    let risultati = reactive({})
+    let isFree = 0;
+    let data:string;
+
+    async function updateDate(dataValue:Date) {
+        let mese = dataValue.getMonth() + 1
+        data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0') 
+    }
+
+    async function handleSuggerimenti() {
+        if (isFree <= 20) {
+            isFree++
+            const results = await searchProvider.search({ query: input.value });
+            Object.assign(risultati, results)
+            isFree--
+        }
+        console.log(risultati)
+    }
+    async function handleRicerca(key: any) {
+        console.log(key)
+        input.value = key.label
+    }
+
+    async function ricercaCircoli(){
+        console.log("Luogo: "+ input.value +  ", Data: " + data)
+
+        if (!axios) return
+
+        let response: AxiosResponse | undefined;
+
+        try{
+            response = await axios.get(
+                `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?luogo=${input.value}&data=${data}`, //Impostare l'URL a cui collagarsi
+                {
+                    headers: {
+                        'x-access-token': store.state.auth.token
+                    }
+                }
+            )
+
+            
+
+        } catch( err: any ) {
+            console.log(err)
+        }
+
+        console.log(response)
 
     }
-]
 
-
-let input = ref()
-let risultati = reactive({})
-let isFree = 0;
-
-async function handleSuggerimenti() {
-    if (isFree <= 20) {
-        isFree++
-        const results = await searchProvider.search({ query: input.value });
-        Object.assign(risultati, results)
-        isFree--
-    }
-}
-async function handleRicerca(key: any) {
-    console.log(key)
-    input.value = key.label
-}
-
+    onMounted(()=>{
+        updateDate(new Date())
+    })
 
 </script>
