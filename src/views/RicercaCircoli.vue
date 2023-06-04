@@ -38,7 +38,7 @@
 
 
 <script setup lang="ts">
-import { reactive, ref, computed, onMounted } from 'vue';
+import { reactive, ref, computed, onMounted, type Ref } from 'vue';
 import '../assets/searchSuggestion.css'
 import { BingProvider } from 'leaflet-geosearch';
 import { Input } from 'flowbite-vue'
@@ -49,6 +49,7 @@ import MobileHeader from '@/components/MobileHeader.vue'
 import DataPicker from '@/components/DataPicker.vue';
 import axios, { type AxiosResponse } from "axios";
 import { useStore } from "vuex";
+import CampoBgIcon from '@/components/icons/CampoBgIcon.vue';
 
 const store = useStore()
 
@@ -60,25 +61,13 @@ const store = useStore()
     },
     });
 
-    const circoliTrovati = [
-        {
-            nomeCircolo: "Beppone",
-            iscritto: true,
-            campi: [TipoCampo.Esterno, TipoCampo.Interno]
-        },
-        {
-            nomeCircolo: "WPadel",
-            iscritto: true,
-            campi: [TipoCampo.Esterno]
-        },
-        {
-            nomeCircolo: "InPadelWeHub",
-            iscritto: true,
-            campi: [TipoCampo.Interno]
+    interface circoloTrovato {
+        nomeCircolo: string,
+        iscritto: boolean,
+        campi: TipoCampo[]
+    }
 
-        }
-    ]
-
+    var circoliTrovati: Ref<circoloTrovato[]> = ref([])
 
     let input = ref()
     let risultati = reactive({})
@@ -105,7 +94,8 @@ const store = useStore()
     }
 
     async function ricercaCircoli(){
-        console.log("Luogo: "+ input.value +  ", Data: " + data)
+
+        circoliTrovati.value = [] 
 
         if (!axios) return
 
@@ -121,13 +111,36 @@ const store = useStore()
                 }
             )
 
-            
 
         } catch( err: any ) {
             console.log(err)
         }
 
-        console.log(response)
+        if(response){
+            response.data.payload.forEach((circolo:any)=>{
+
+                let circoloTrovato: circoloTrovato = {
+                    nomeCircolo: circolo.nome,
+                    iscritto: circolo.iscritto,
+                    campi: []
+                }
+
+                let interni = 0
+                let esterni = 0
+
+                circolo.campi.forEach((campo:any) => {
+                    if(campo.Tipologia === 'Interno') interni++;
+                    if(campo.Tipologia === 'Esterno') esterni++; 
+                })
+
+                if(interni>0) circoloTrovato.campi.push(TipoCampo.Interno)
+                if(esterni>0) circoloTrovato.campi.push(TipoCampo.Esterno)
+
+                circoliTrovati.value.push(circoloTrovato)
+
+            })
+        }
+
 
     }
 
