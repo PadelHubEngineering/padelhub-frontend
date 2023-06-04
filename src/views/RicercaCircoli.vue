@@ -11,12 +11,25 @@
             <div class="icon"><i class="fas fa-search"></i></div>
         </div>
     </div>
+
+
+    <!-- SABRINA -->
+    <div> 
+        <ItemCircoloTrovato></ItemCircoloTrovato>
+    </div>
+
 </template>
+
+
+
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import '../assets/searchSuggestion.css'
 import { BingProvider } from 'leaflet-geosearch';
 import { Input } from 'flowbite-vue'
+import ItemCampoTipo from '../components/RicercaCircoli/ItemCampoTipo.vue'
+import { TipoCampo } from '@/components/RicercaCircoli/TipoCampo.types';
+import ItemCircoloTrovato from '@/components/RicercaCircoli/ItemCircoloTrovato.vue';
 
 // const provider = new OpenStreetMapProvider();
 const searchProvider = new BingProvider({
