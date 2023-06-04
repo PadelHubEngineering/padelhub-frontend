@@ -1,31 +1,33 @@
 <template>
 
-    <MobileHeader :ready="true" title='Gioca'>
-        <template v-slot:rightSide>
-            <img src='/img/logoPadelHub.png' class='h-5/6'/>
-        </template>
-    </MobileHeader>
+    <div class="sticky top-0 ">
+        <MobileHeader :ready="true" title='Gioca'>
+            <template v-slot:rightSide>
+                <img src='/img/logoPadelHub.png' class='h-5/6'/>
+            </template>
+        </MobileHeader>
 
-    <!-- <Input v-model="input" placeholder="inserisci il tuo indirizzo" label="indirizzo" @input="search"> </Input>
-    <p v-for="luoghi in risultati"> {{ luoghi.label }}></p> -->
-    <div class="mt-8 mb-5">
-        <div class="searchInput active">
-            <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti"/>
-            <div class="resultBox">
-                <!-- here list are inserted from javascript -->
-                <li v-for="luoghi in risultati" :key="luoghi" @click="handleRicerca(luoghi)"> {{ luoghi.label }} </li> 
+        <!-- <Input v-model="input" placeholder="inserisci il tuo indirizzo" label="indirizzo" @input="search"> </Input>
+        <p v-for="luoghi in risultati"> {{ luoghi.label }}></p> -->
+        <div class="mt-8 mb-5">
+            <div class="searchInput active">
+                <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti"/>
+                <div class="resultBox">
+                    <!-- here list are inserted from javascript -->
+                    <li v-for="luoghi in risultati" :key="luoghi" @click="handleRicerca(luoghi)"> {{ luoghi.label }} </li> 
+                </div>
+                <div class="icon"><i class="fas fa-search"></i></div>
             </div>
-            <div class="icon"><i class="fas fa-search"></i></div>
+            <div class="ml-10">
+                <DataPicker></DataPicker>
+            </div>
+            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg">CERCA</button>
         </div>
-        <div class="ml-10">
-            <DataPicker></DataPicker>
-        </div>
-        <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg">CERCA</button>
     </div>
 
 
     <!-- SABRINA -->
-    <div class="bg-ricercaCircoli p-0 pt-1">
+    <div class="bg-ricercaCircoli  p-0 pt-1 bg-fixed">
         <div v-for="circolo in circoliTrovati">
             <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi"></ItemCircoloTrovato>
         </div> 
