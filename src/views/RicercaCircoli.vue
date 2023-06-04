@@ -1,6 +1,6 @@
 <template>
 
-    <div class="sticky top-0 ">
+    <div class="sticky top-0 bg-white">
         <MobileHeader :ready="true" title='Gioca'>
             <template v-slot:rightSide>
                 <img src='/img/logoPadelHub.png' class='h-5/6'/>
