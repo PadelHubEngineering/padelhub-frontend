@@ -4,28 +4,26 @@ import { TipoCampo } from './TipoCampo.types';
 import ItemCampoTipo from './ItemCampoTipo.vue';
 import PartitaHeader from '../partite/PartitaHeader.vue';
 
-const obj = {
-    nomeCircolo: "Beppone",
-    iscritto: true,
-    campi: [TipoCampo.Esterno, TipoCampo.Interno]
-}
 
+const props = defineProps({
+        nomeCircolo: { type: String, required: false },
+        iscritto: { type: Boolean, required: false },
+        campi: { type: Array<TipoCampo>, required:false}
+    })
 
 </script>
 
 
 <template>
     
-    <div class="bg-white p-2 text-bluPadelHub border-2 border-bluPadelHub rounded-lg">
+    <div class="bg-white p-2 text-bluPadelHub border-2 border-bluPadelHub rounded-lg my-3 bg-opacity-70 w-full">
         <div class="font-semibold">
-        <PartitaHeader :iscritto="obj.iscritto" :nome-circolo="obj.nomeCircolo"></PartitaHeader> 
+        <PartitaHeader :iscritto="props.iscritto" :nome-circolo="props.nomeCircolo"></PartitaHeader> 
         </div>
-        <div v-for="tipo in obj.campi">
+        <div v-for="tipo in props.campi">
             <ItemCampoTipo :tipo=tipo></ItemCampoTipo>
         </div>
     </div>
-
-
 </template>
 
 

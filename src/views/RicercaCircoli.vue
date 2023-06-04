@@ -1,7 +1,14 @@
 <template>
+
+    <MobileHeader :ready="true" title='Gioca'>
+        <template v-slot:rightSide>
+            <img src='/img/logoPadelHub.png' class='h-5/6'/>
+        </template>
+    </MobileHeader>
+
     <!-- <Input v-model="input" placeholder="inserisci il tuo indirizzo" label="indirizzo" @input="search"> </Input>
     <p v-for="luoghi in risultati"> {{ luoghi.label }}></p> -->
-    <div class="container">
+    <div class="mt-8 mb-5">
         <div class="searchInput active">
             <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti"/>
             <div class="resultBox">
@@ -10,12 +17,18 @@
             </div>
             <div class="icon"><i class="fas fa-search"></i></div>
         </div>
+        <div class="ml-10">
+            <DataPicker></DataPicker>
+        </div>
+        <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg">CERCA</button>
     </div>
 
 
     <!-- SABRINA -->
-    <div> 
-        <ItemCircoloTrovato></ItemCircoloTrovato>
+    <div class="bg-ricercaCircoli p-0 pt-1">
+        <div v-for="circolo in circoliTrovati">
+            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi"></ItemCircoloTrovato>
+        </div> 
     </div>
 
 </template>
@@ -30,6 +43,8 @@ import { Input } from 'flowbite-vue'
 import ItemCampoTipo from '../components/RicercaCircoli/ItemCampoTipo.vue'
 import { TipoCampo } from '@/components/RicercaCircoli/TipoCampo.types';
 import ItemCircoloTrovato from '@/components/RicercaCircoli/ItemCircoloTrovato.vue';
+import MobileHeader from '@/components/MobileHeader.vue'
+import DataPicker from '@/components/DataPicker.vue';
 
 // const provider = new OpenStreetMapProvider();
 const searchProvider = new BingProvider({
@@ -37,6 +52,27 @@ const searchProvider = new BingProvider({
     key: import.meta.env.VITE_BING_MAP_KEY,
   },
 });
+
+const circoliTrovati = [
+    {
+        nomeCircolo: "Beppone",
+        iscritto: true,
+        campi: [TipoCampo.Esterno, TipoCampo.Interno]
+    },
+    {
+        nomeCircolo: "WPadel",
+        iscritto: true,
+        campi: [TipoCampo.Esterno]
+    },
+    {
+        nomeCircolo: "InPadelWeHub",
+        iscritto: true,
+        campi: [TipoCampo.Interno]
+
+    }
+]
+
+
 let input = ref()
 let risultati = reactive({})
 let isFree = 0;

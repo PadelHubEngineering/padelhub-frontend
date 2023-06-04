@@ -129,12 +129,12 @@ export default {
 }
 
 /* drop arrow */
-.custom-select:after {
+/* .custom-select:after {
   content: '\25bc';
   color: #2f8cce85;
   font-size: 12px;
   position: absolute;
   right: 8px;
   top: 10px;
-}
+} */
 </style>

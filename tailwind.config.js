@@ -12,7 +12,8 @@ module.exports = {
         'lg': '1rem'
       },
       backgroundImage: {
-        'login': "url('/img/sfondoLogin.png')"
+        'login': "url('/img/sfondoLogin.png')",
+        'ricercaCircoli': "url('/img/bgRicercaCircoli.jpg')"
       }
     },
     colors: {
