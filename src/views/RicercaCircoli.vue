@@ -10,7 +10,7 @@
         <!-- <Input v-model="input" placeholder="inserisci il tuo indirizzo" label="indirizzo" @input="search"> </Input>
         <p v-for="luoghi in risultati"> {{ luoghi.label }}></p> -->
         <div class="mt-8 mb-5">
-            <div class="searchInput active">
+            <div class="searchInput active border-2 border-bluPadelHub rounded-lg font-circolo">
                 <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti"/>
                 <div class="resultBox">
                     <!-- here list are inserted from javascript -->
@@ -18,7 +18,7 @@
                 </div>
                 <div class="icon"><i class="fas fa-search"></i></div>
             </div>
-            <div class="ml-10">
+            <div class="ml-10 mt-3">
                 <DataPicker></DataPicker>
             </div>
             <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg">CERCA</button>
