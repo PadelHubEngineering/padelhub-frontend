@@ -20,7 +20,8 @@
             <div class="ml-10 mt-3">
                 <DataPicker @update="updateDate"></DataPicker>
             </div>
-            <button class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg disabled:bg-bluPadelHubHover"
+            <button
+                class="bg-bluPadelHub text-white rounded-lg font-circolo py-3 w-full my-5 shadow-lg disabled:bg-bluPadelHubHover"
                 @click="ricercaCircoli" :disabled="!cliccatoSuggestion">CERCA</button>
         </div>
     </div>
@@ -29,7 +30,8 @@
     <!-- SABRINA -->
     <div class="bg-gradient-to-r from-bluPadelHub to-arancio p-0 pt-1 bg-fixed h-screen bg-no-repeat bg-bottom">
         <div v-for="circolo in circoliTrovati">
-            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi"></ItemCircoloTrovato>
+            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi">
+            </ItemCircoloTrovato>
         </div>
     </div>
 </template>
@@ -58,61 +60,106 @@ const searchProvider = new BingProvider({
     params: {
         key: import.meta.env.VITE_BING_MAP_KEY,
     },
-    });
+});
 
-    interface circoloTrovato {
-        nomeCircolo: string,
-        iscritto: boolean,
-        campi: TipoCampo[]
+interface circoloTrovato {
+    nomeCircolo: string,
+    iscritto: boolean,
+    campi: TipoCampo[]
+}
+
+var circoliTrovati: Ref<circoloTrovato[]> = ref([])
+
+
+let input = ref()
+let risultati = reactive({})
+let cliccatoSuggestion = ref(false)
+let isFree = 0;
+let data: string;
+let circoliList: any[] = []
+let location = {
+    x: null,
+    y: null
+}
+let circoloSet: string | null = null
+
+async function updateDate(dataValue: Date) {
+    let mese = dataValue.getMonth() + 1
+    data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
+}
+
+async function handleSuggerimenti() {
+    cliccatoSuggestion.value = false
+    if (isFree <= 20) {
+        isFree++
+        const results: any[] = []
+        const luoghi: any[] = await searchProvider.search({ query: input.value });
+        luoghi.forEach((luogo) => {
+            if (results.findIndex((el) => { return el.label == luogo.label }) == -1) {
+                results.push(luogo)
+            }
+        })
+        filterItems(circoliList, input.value).forEach((circolo) => {
+            const toPush: any = { _id: circolo._id, label: `circolo: ${circolo.nome}`, type: "Circolo" }
+            if (results.findIndex((el) => { return el.label == toPush.label }) == -1) {
+                results.push(toPush)
+            }
+        })
+        //Svuota l'oggetto reactive 'risultati' senza perdere reactivity
+        Object.keys(risultati).forEach(key => delete risultati[key as keyof typeof risultati]);
+        Object.assign(risultati, results)
+
+        isFree--
     }
-
-    var circoliTrovati: Ref<circoloTrovato[]> = ref([])
-
-
-    let input = ref()
-    let risultati = reactive({})
-    let cliccatoSuggestion = ref(false)
-    let isFree = 0;
-    let data: string;
-    let location = {
-        x: null,
-        y: null
+}
+function filterItems(arr: any[], query: string): any[] {
+    if (query == "")
+        return []
+    return arr.filter((el) => el.nome.toLowerCase().includes(query.toLowerCase()));
+}
+async function handleRicerca(key: any) {
+    console.log(key)
+    if (key.type == "Circolo") {
+        circoloSet = key._id
+        location.x = null
+        location.y = null
     }
-
-    async function updateDate(dataValue: Date) {
-        let mese = dataValue.getMonth() + 1
-        data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
-    }
-
-    async function handleSuggerimenti() {
-        cliccatoSuggestion.value = false
-        if (isFree <= 20) {
-            isFree++
-            const results = await searchProvider.search({ query: input.value });
-            Object.assign(risultati, results)
-            isFree--
-        }
-    }
-    async function handleRicerca(key: any) {
-        console.log(key)
-        input.value = key.label
+    else {
         location.x = key.x
         location.y = key.y
-        cliccatoSuggestion.value = true
-        risultati = reactive({})
+        circoloSet = null
     }
+    input.value = key.label
+    cliccatoSuggestion.value = true
+    //Svuota l'oggetto reactive 'risultati' senza perdere reactivity
+    Object.keys(risultati).forEach(key => delete risultati[key as keyof typeof risultati]);
+}
 
-    async function ricercaCircoli(){
+async function ricercaCircoli() {
 
-        circoliTrovati.value = [] 
+    circoliTrovati.value = []
 
-        if (!axios) return
+    if (!axios) return
 
-        let response: AxiosResponse | undefined;
-
-        try{
+    let response: AxiosResponse | undefined;
+    if (location.x != null && location.y != null) {
+        try {
             response = await axios.get(
-                `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?luogo=${input.value}&data=${data}`, //Impostare l'URL a cui collagarsi
+                `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?x=${location.x}&y=${location.y}&data=${data}`, //Impostare l'URL a cui collagarsi
+                {
+                    headers: {
+                        'x-access-token': store.state.auth.token
+                    }
+                }
+            )
+        } catch (err: any) {
+            console.log(err)
+        }
+    }
+    else if (circoloSet != null) {
+        try {
+            response = await axios.get(
+                `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?circolo=${circoloSet}&data=${data}`, //Impostare l'URL a cui collagarsi
                 {
                     headers: {
                         'x-access-token': store.state.auth.token
@@ -120,42 +167,60 @@ const searchProvider = new BingProvider({
                 }
             )
 
-            console.log(response)
-
-        } catch( err: any ) {
+        } catch (err: any) {
             console.log(err)
         }
-
-        if(response){
-            response.data.payload.forEach((circolo:any)=>{
-
-                let circoloTrovato: circoloTrovato = {
-                    nomeCircolo: circolo.nome,
-                    iscritto: circolo.iscritto,
-                    campi: []
-                }
-
-                let interni = 0
-                let esterni = 0
-
-                circolo.campi.forEach((campo:any) => {
-                    if(campo.tipologia === 'Interno') interni++;
-                    if(campo.tipologia === 'Esterno') esterni++; 
-                })
-
-                if(interni>0) circoloTrovato.campi.push(TipoCampo.Interno)
-                if(esterni>0) circoloTrovato.campi.push(TipoCampo.Esterno)
-
-                circoliTrovati.value.push(circoloTrovato)
-
-            })
-        }
-
-
+    }
+    else {
+        console.log("Devi cliccare sulle suggestion!");
     }
 
-onMounted(() => {
+    if (response) {
+        circoliTrovati.value = []
+        response.data.payload.forEach((circolo: any) => {
+
+            let circoloTrovato: circoloTrovato = {
+                nomeCircolo: circolo.nome,
+                iscritto: circolo.iscritto,
+                campi: []
+            }
+
+            let interni = 0
+            let esterni = 0
+
+            circolo.campi.forEach((campo: any) => {
+                if (campo.tipologia === 'Interno') interni++;
+                if (campo.tipologia === 'Esterno') esterni++;
+            })
+
+            if (interni > 0) circoloTrovato.campi.push(TipoCampo.Interno)
+            if (esterni > 0) circoloTrovato.campi.push(TipoCampo.Esterno)
+
+            circoliTrovati.value.push(circoloTrovato)
+
+        })
+    }
+
+
+
+    console.log(response)
+
+}
+
+onMounted(async () => {
     updateDate(new Date())
+
+    //per suggestion circoli
+    try {
+        const { data, status } = await axios.get(
+            `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli/getCircoli`,
+        )
+        if (status == 200) {
+            circoliList = data.payload
+        }
+    } catch (err: any) {
+        console.log(err)
+    }
 })
 
 </script>
