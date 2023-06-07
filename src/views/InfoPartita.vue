@@ -6,15 +6,15 @@
     import VisualizzatoreGiocatori from "@/components/partite/VisualizzatoreGiocatori.vue"
     import MobileHeader from "@/components/MobileHeader.vue"
     import axios from 'axios';
-    import { getLivello, stampaCategorie, type PartitaRetI } from '@/components/partite/Partita.types';
+    import { stampaCategorie, type PartitaRetI } from '@/components/partite/Partita.types';
     import { computed, onMounted, ref, type Ref } from 'vue';
-    import { useStore } from 'vuex';
     import { DateTime } from "luxon"
+    import { useAuthUserStore } from '@/stores/authStore';
 
 
     const route = useRoute()
     const router = useRouter()
-    const store = useStore();
+    const authUserStore = useAuthUserStore();
 
     const { idPartita } = route.params
 
@@ -38,7 +38,7 @@
                 `${import.meta.env.VITE_BACK_URL}/api/v1/partite/${idPartita}`,
                 {
                     headers: {
-                        'x-access-token': store.state.auth.token
+                        'x-access-token': authUserStore.token
                     }
                 }
             )
@@ -103,7 +103,7 @@
     const isPartecipante = computed( () => {
         if( !partita.value ) return undefined
 
-        return partita.value.giocatori.filter(g => g.email === store.state.auth.email)
+        return partita.value.giocatori.filter(g => g.email === authUserStore.email)
     } )
 
     function pay() {

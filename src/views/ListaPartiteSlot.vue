@@ -6,13 +6,13 @@
     import PartitaHeader from "../components/partite/PartitaHeader.vue"
     import { useRoute } from "vue-router";
     import MobileHeader from "@/components/MobileHeader.vue"
-    import { useStore } from "vuex";
     import type { CircoloRetI, PartitaRetI, PartiteAperteI } from "@/components/partite/Partita.types";
     import axios from "axios";
+import { useAuthUserStore } from "@/stores/authStore";
 
 
     const route = useRoute()
-    const store = useStore()
+    const authUserStore = useAuthUserStore()
 
     const { circolo, year, month, day, hour, minutes } = route.params;
 
@@ -54,7 +54,7 @@
                 `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/${circolo}/partiteAperte/${data_api}`,
                 {
                     headers: {
-                        'x-access-token': store.state.auth.token
+                        'x-access-token': authUserStore.token
                     }
                 }
             )

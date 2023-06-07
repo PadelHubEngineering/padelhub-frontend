@@ -4,9 +4,9 @@
     import { Color } from '../GestioneSlot/ItemSlot.vue'
     import QuickShowPartite from "../partite/QuickShowPartite.vue"
     import axios, { AxiosError } from 'axios'
-    import { useStore } from 'vuex';
+    import { useAuthUserStore } from '@/stores/authStore';
 
-    const store = useStore();
+    const authUserStore = useAuthUserStore();
 
     var id_campo = ref("")
     var data_ora_inizio = ref(new Date())
@@ -45,7 +45,7 @@
                 {
                     dataOraPrenotazione: data_ora_inizio.value,
                     idCampo: id_campo.value,
-                    token: store.state.auth.token
+                    token: authUserStore.token
                 },
             )
         } catch (error: any) {

@@ -1,14 +1,115 @@
+<script setup lang='ts'>
+  import { TipoAccount, useAuthUserStore } from '@/stores/authStore';
+import { reactive, ref } from 'vue';
+    import { useRouter } from "vue-router"
+    import axios, { AxiosError } from "axios"
+
+    const router = useRouter();
+    const authUserStore = useAuthUserStore()
+
+    const msg = reactive({
+        email: "",
+        password: "",
+        error: ""
+    })
+    const disabled: Array<boolean>= reactive([ false, false ])
+
+    const email = ref("")
+    const password = ref("")
+
+    function validateEmail(value: any) {
+        if (new RegExp("^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$", "v").test(value)) { //Se rispetta il form
+            msg.email = '';
+            disabled[0] = false
+        } else {
+            msg.email = 'Email non valida';
+            disabled[0] = true
+        }
+
+    }
+    function validatePassword(value: any) {
+
+        if (new RegExp("^[[A-Za-z\d@$!%*?&]{1,30}$", "v").test(value)) { //Se rispetta il regex
+            msg.password = '';
+            disabled[1] = false
+
+        } else {
+            msg.password = 'Password non valida';
+            disabled[1] =  true
+        }
+
+    }
+    function handleSubmission() {
+        alert(`Email: ${email} Password: ${password}`)
+    }
+    async function login() {
+
+        let response = null;
+
+        try{
+            response = await axios.post(
+                `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
+                {
+                    email: email.value,
+                    password: password.value
+                }
+            )
+        } catch(err) {
+            let act_err = err as AxiosError
+            const data: any = act_err.response?.data;
+
+            if( act_err.response )
+              msg.error = data.message;
+            else
+              msg.error = "Login fallito: Riprova più tardi";
+        }
+
+        if( response != null ) {
+
+
+            console.log(response)
+
+            const { success } = response.data;
+
+            const { token, dati } = response.data.payload;
+            const { email, nome, tipoAccount } = dati;
+
+            //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
+            authUserStore.authenticated = success;
+            authUserStore.email = email;
+            authUserStore.nome = nome;
+            authUserStore.tipoAccount = tipoAccount;
+            authUserStore.token = token;
+
+            if (tipoAccount == TipoAccount.Giocatore) { //E' un giocatore
+                router.push({ name: "DashboardGiocatore" })
+            } else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo
+                router.push({ name: "DashboardCircolo" })
+            }
+        }
+    }
+
+</script>
+
 <template>
   <div id="visa">
     <h1 class="text-bluPadelHub font-bold text-xl text-center">Login</h1>
     <br><br>
     <form @submit.prevent="handleSubmission" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
-      <input type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
+      <input
+        type="text"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
         class="invalid:border-invalidForm  invalid:text-invalidForm 
                focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm placeholder:italic border-bluPadelHub shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        v-model="email" required> <br>
-      <span v-if="msg.email" class="italic text-xs">{{ msg.email }}</span>
+        v-model="email" required>
+
+      <br>
+      <span
+          v-if="msg.email"
+          class="italic text-xs"
+      >{{ msg.email }}</span>
+
       <br>
       <label for="password" class="font-bold text-bluPadelHub">Password</label>
       <input type="password" pattern="[A-Za-z\d@$!%*?&]{1,30}"
@@ -25,106 +126,5 @@
     </form>
   </div>
 </template>
-
-
-
-<script lang="ts">
-
-import { TipoAccount } from '@/store/auth';
-import axios from 'axios';
-import { createApp, inject } from 'vue';
-
-export default {
-  name: 'LoginView',
-  data() {
-    return {
-      email: "",
-      password: "",
-      output: "",
-      disabled: [true, true],
-      msg: {
-        email: '',
-        password: '',
-        error: ''
-      },
-    }
-  },
-  watch: {
-    email(value) {
-      this.validateEmail(value);
-    },
-    password(value) {
-      this.validatePassword(value);
-    }
-  },
-  methods: {
-    validateEmail(value: any) {
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) { //Se rispetta il form
-        this.msg['email'] = '';
-        this.disabled = [false, this.disabled[1]]
-      } else {
-        this.msg['email'] = 'Email non valida';
-        this.disabled = [true, this.disabled[1]]
-      }
-
-    },
-    validatePassword(value: any) {
-
-      if (/^[[A-Za-z\d@$!%*?&]{1,30}$/.test(value)) { //Se rispetta il regex 
-        this.msg['password'] = '';
-        this.disabled = [this.disabled[0], false]
-
-      } else {
-        this.msg['password'] = 'Password non valida';
-        this.disabled = [this.disabled[0], true]
-      }
-
-    },
-    handleSubmission() {
-      alert(`Email: ${this.email} Password: ${this.password}`)
-    },
-    login() {
-
-      //const axios: Axios | undefined = this.$axios as Axios;
-      if (!axios) return
-
-      axios.post(
-        `${import.meta.env.VITE_BACK_URL}/api/v1/authentication`,
-        {
-          email: this.email,
-          password: this.password
-        }
-      ).then(response => {
-
-        console.log(response)
-
-        const { success, message, token, dati } = response.data.payload;
-        const { email, nome, tipoAccount } = dati;
-
-
-        //Memorizzo lo stato nello store per avere in seguito i dati che mi servono
-        this.$store.commit(`auth/setAuthenticated`, success)
-        this.$store.commit(`auth/setEmail`, email)
-        this.$store.commit(`auth/setNome`, nome)
-        this.$store.commit(`auth/setTipoAccount`, tipoAccount)
-        this.$store.commit(`auth/setToken`, token)
-
-
-        if (tipoAccount == TipoAccount.Giocatore) { //E' un giocatore
-          this.$router.push('/dashGiocatore')
-        }
-        else if (tipoAccount == TipoAccount.Circolo) { //E' un circolo
-          this.$router.push('/dashCircolo')
-        }
-      }).catch(err => {
-        const { message } = err.response.data;
-        this.msg['error'] = message
-      })
-
-    },
-  }
-}
-
-</script>
 
 

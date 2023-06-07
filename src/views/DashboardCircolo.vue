@@ -6,9 +6,9 @@
     import DataPickerVue from "@/components/DataPicker.vue";
     import axios, { type AxiosResponse } from "axios";
     import { onMounted, ref, type Ref } from "vue";
-    import { useStore } from "vuex";
+import { useAuthUserStore } from "@/stores/authStore";
 
-    const store = useStore()
+    const authUserStore = useAuthUserStore()
 
     type Mappa = {
         orari: string[],
@@ -51,7 +51,7 @@
                 `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/prenotazioniSlot/${dataToPass}`, //Impostare l'URL a cui collagarsi
                 {
                     headers: {
-                        'x-access-token': store.state.auth.token
+                        'x-access-token': authUserStore.token
                     }
                 }
             )

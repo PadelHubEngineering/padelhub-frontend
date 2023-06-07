@@ -119,19 +119,16 @@ import NumeroCampi from '@/components/AreaCircolo/NumeroCampi.vue';
 import CampoTelefono from '@/components/Registrazione/CampoTelefono.vue';
 import CampoNome from '@/components/Registrazione/CampoNome.vue';
 import CampoEmail from '@/components/Registrazione/CampoEmail.vue';
-import CampoOra from '@/components/AreaCircolo/CampoOra.vue';
-import { Carousel, Button, Input, ListGroup, ListGroupItem, ButtonGroup, Modal } from 'flowbite-vue'
+import { Button, Input, ListGroup, ListGroupItem, ButtonGroup, Modal } from 'flowbite-vue'
 import AperturaChiusura from '@/components/AreaCircolo/AperturaChiusura.vue';
-import { reactive, ref, defineProps, onMounted, onUpdated } from 'vue';
-import { anyTypeAnnotation, validate } from '@babel/types';
+import { reactive, ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useStore } from "vuex";
 import { getCurrentInstance } from 'vue'
-import { computed } from 'vue';
+import { useAuthUserStore } from '@/stores/authStore';
 
 const instance = getCurrentInstance();
 
-const store = useStore()
+const authUserStore = useAuthUserStore()
 
 const days = ["Lunedi", "Martedi", "Mercoledi", "Giovedi", "Venerdi", "Sabato", "Domenica"]
 const duration = [60, 90, 120]
@@ -210,7 +207,7 @@ onMounted(async () => {
     axios.get(
         `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/datiCircolo`, {
         headers: {
-            'x-access-token': store.state.auth.token
+            'x-access-token': authUserStore.token
         }
     }
     ).then(response => {
@@ -252,7 +249,7 @@ async function submitValues() {
 
     console.log("Submitted")
     if (!axios) return
-    const resp = Object.assign(data, { token: store.state.auth.token })
+    const resp = Object.assign(data, { token: authUserStore.token })
     console.log(resp)
     axios.post(
         `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/inserimentoDatiCircolo`, resp
