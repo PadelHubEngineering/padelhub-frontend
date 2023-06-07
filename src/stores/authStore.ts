@@ -1,9 +1,6 @@
 import type { State } from "vue"
-import getters from "./getters"
-import mutations from "./mutations"
 import { defineStore } from "pinia"
-
-
+import { useStorage } from '@vueuse/core'
 
 export enum TipoAccount {
     Giocatore = "Giocatore",
@@ -14,11 +11,11 @@ export enum TipoAccount {
 
 export const useAuthUserStore = defineStore("authUser", {
     state: (): State => ({
-        authenticated: false,
-        email: "",
-        nome: "",
-        tipoAccount: null,
-        token: ""
+        authenticated: useStorage("authenticated", false),
+        email: useStorage("email", ""),
+        nome: useStorage("nome", ""),
+        tipoAccount: useStorage("tipoAccount", null),
+        token: useStorage("token", "")
     }),
     actions: {
         logout() {
