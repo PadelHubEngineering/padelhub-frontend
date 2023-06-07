@@ -59,7 +59,8 @@ const router = createRouter({
       name: 'RicercaCircoli',
       component: () => import('@/views/RicercaCircoli.vue'),
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
-    }
+    },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/views/NotFound.vue") },
   ],
   linkActiveClass: 'active'
 })
@@ -75,9 +76,24 @@ router.beforeEach(async (to, from_route) => {
     return {
       name: "Login",
       // save the location we were at to come back later
-      query: { redirect: to.fullPath },
+      query: { redirect: to.path === "/"? undefined : to.fullPath },
     }
-  //else if ( from_route.query )
+
+  else if( to.name === "Login" && authUserStore.authenticated ) {
+
+    if( authUserStore.tipoAccount === TipoAccount.Giocatore )
+      return { name: "DashboardGiocatore" }
+
+    else if( authUserStore.tipoAccount === TipoAccount.Circolo )
+      return { name: "DashboardCircolo" }
+  }
+
+  else if ( to.path === "/" )
+    return {
+      name: "Login"
+    }
+
+
 
 })
 

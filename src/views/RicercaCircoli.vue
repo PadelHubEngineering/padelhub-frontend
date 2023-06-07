@@ -1,6 +1,9 @@
 <template>
     <div class="sticky top-0 bg-white">
         <MobileHeader :ready="true" title='Gioca'>
+            <template v-slot:leftSide>
+                <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
+            </template>
             <template v-slot:rightSide>
                 <img src='/img/logoPadelHub.png' class='h-5/6' />
             </template>
@@ -49,11 +52,12 @@ import ItemCircoloTrovato from '@/components/RicercaCircoli/ItemCircoloTrovato.v
 import MobileHeader from '@/components/MobileHeader.vue'
 import DataPicker from '@/components/DataPicker.vue';
 import axios, { type AxiosResponse } from "axios";
-import { useStore } from "vuex";
 import CampoBgIcon from '@/components/icons/CampoBgIcon.vue';
+import { useAuthUserStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router';
 
-const store = useStore()
-
+const authUserStore = useAuthUserStore()
+const router = useRouter();
 
 // const provider = new OpenStreetMapProvider();
 const searchProvider = new BingProvider({
@@ -148,7 +152,7 @@ async function ricercaCircoli() {
                 `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?x=${location.x}&y=${location.y}&data=${data}`, //Impostare l'URL a cui collagarsi
                 {
                     headers: {
-                        'x-access-token': store.state.auth.token
+                        'x-access-token': authUserStore.token
                     }
                 }
             )
@@ -162,7 +166,7 @@ async function ricercaCircoli() {
                 `${import.meta.env.VITE_BACK_URL}/api/v1/ricercaCircoli?circolo=${circoloSet}&data=${data}`, //Impostare l'URL a cui collagarsi
                 {
                     headers: {
-                        'x-access-token': store.state.auth.token
+                        'x-access-token': authUserStore.token
                     }
                 }
             )

@@ -13,16 +13,34 @@
     const getUsername = computed( () => {
         return userAuthStore.nome;
     } )
+
+    function logout() {
+        console.log("logged out")
+        userAuthStore.logout();
+
+        console.log(userAuthStore.authenticated)
+
+        router.push({ path: "/" })
+    }
 </script>
 
 
 <template>
     <MobileHeader :ready="true" title="Dashboard">
+        <template v-slot:leftSide>
+            <img src='/img/exit.png' class='h-5/6' v-on:click="logout" />
+        </template>
+        <template v-slot:rightSide>
+            <img src='/img/logoPadelHub.png' />
+        </template>
     </MobileHeader>
 
     <h3 class='text-3xl px-2 py-4 text-center w-full'>Ciao {{ getUsername }}!</h3>
 
-    <button class='rounded-2xl bg-bluPadelHub p-2 widthFullNoM flex items-center'>
+    <button
+        class='rounded-2xl bg-bluPadelHub p-2 widthFullNoM flex items-center'
+        v-on:click.prevent="router.push({ name: 'RicercaCircoli' })"
+    >
         <IconSearch class='w-10 h-10 text-white fill-white' />
         <span class='block mx-auto text-white text-2xl'> Gioca</span>
     </button>
