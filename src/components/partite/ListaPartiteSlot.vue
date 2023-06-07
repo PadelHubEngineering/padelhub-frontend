@@ -3,7 +3,6 @@
     import axios from 'axios';
     import { onMounted, ref, type Ref } from 'vue';
     import type { PartitaRetI, PartiteAperteI } from './Partita.types';
-    import { useStore } from 'vuex';
 
     import PartitaListItem from "./PartitaListItem.vue"
 

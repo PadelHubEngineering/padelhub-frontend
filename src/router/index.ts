@@ -1,5 +1,6 @@
+import { TipoAccount, useAuthUserStore } from '@/stores/authStore';
+import { inject } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 
 const router = createRouter({
@@ -8,53 +9,76 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/LoginView.vue')
+      component: () => import('@/views/LoginView.vue'),
+      meta: { requiredAccount: null }
     },
     {
       path: '/dashGiocatore',
       name: 'DashboardGiocatore',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('@/views/DashboardGiocatore.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ]}
     },
     {
       path: '/dashCircolo',
       name: 'DashboardCircolo',
-      component: () => import('@/views/DashboardCircolo.vue')
+      component: () => import('@/views/DashboardCircolo.vue'),
+      meta: { requiredAccount: [ TipoAccount.Circolo ]}
     },
     {
       path: '/partite/circolo/:circolo/data/:year/:month/:day/:hour/:minutes/',
       name: "PartiteSlot",
-      component: () => import('@/views/ListaPartiteSlot.vue')
+      component: () => import('@/views/ListaPartiteSlot.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     },
     {
       path: '/partita/:idPartita/',
       name: "InfoPartita",
-      component: () => import('@/views/InfoPartita.vue')
+      component: () => import('@/views/InfoPartita.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     },
     {
       path: '/RegistrazioneCircolo',
       name: 'RegistrazioneCircolo',
-      component: () => import('@/views/RegistrazioneCircolo.vue')
+      component: () => import('@/views/RegistrazioneCircolo.vue'),
+      meta: { requiredAccount: null }
     },
     {
       path: '/RegistrazioneGiocatore',
       name: 'RegistrazioneGiocatore',
-      component: () => import('@/views/RegistrazioneGiocatore.vue')
+      component: () => import('@/views/RegistrazioneGiocatore.vue'),
+      meta: { requiredAccount: null }
     },
     {
       path: '/AreaCircolo',
       name: 'AreaCircolo',
-      component: () => import('@/views/AreaCircolo.vue')
+      component: () => import('@/views/AreaCircolo.vue'),
+      meta: { requiredAccount: [ TipoAccount.Circolo ] }
     },
     {
       path: '/RicercaCircoli',
       name: 'RicercaCircoli',
-      component: () => import('@/views/RicercaCircoli.vue')
+      component: () => import('@/views/RicercaCircoli.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     }
   ],
   linkActiveClass: 'active'
+})
+
+router.beforeEach(async (to, from_route) => {
+
+  const authUserStore = useAuthUserStore();
+
+  // console.log(authUserStore.authenticated)
+  // console.log( from_route.query )
+
+  if( to.meta.requiredAccount !== null && !authUserStore.authenticated )
+    return {
+      name: "Login",
+      // save the location we were at to come back later
+      query: { redirect: to.fullPath },
+    }
+  //else if ( from_route.query )
+
 })
 
 export default router
