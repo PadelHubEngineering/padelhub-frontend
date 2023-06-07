@@ -4,7 +4,7 @@
     import { computed, onMounted, ref, type Ref } from "vue";
     import ListaPartiteSlot from "../components/partite/ListaPartiteSlot.vue"
     import PartitaHeader from "../components/partite/PartitaHeader.vue"
-    import { useRoute } from "vue-router";
+    import { useRoute, useRouter } from "vue-router";
     import MobileHeader from "@/components/MobileHeader.vue"
     import type { CircoloRetI, PartitaRetI, PartiteAperteI } from "@/components/partite/Partita.types";
     import axios from "axios";
@@ -12,6 +12,7 @@ import { useAuthUserStore } from "@/stores/authStore";
 
 
     const route = useRoute()
+    const router = useRouter()
     const authUserStore = useAuthUserStore()
 
     const { circolo, year, month, day, hour, minutes } = route.params;
@@ -85,7 +86,11 @@ import { useAuthUserStore } from "@/stores/authStore";
 
 <template>
 
-    <MobileHeader :ready="true" title='Gioca'/>
+    <MobileHeader :ready="true" title='Gioca'>
+        <template v-slot:leftSide>
+            <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
+        </template>
+    </MobileHeader>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="datiCircolo?.nome"/>
 

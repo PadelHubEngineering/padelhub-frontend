@@ -26,7 +26,8 @@ module.exports = {
       yellowReserved: 'rgb(251, 244, 94)',
       redBusy: 'rgb(248, 106, 106)',
       graySlate: 'rgb(71 85 105)',
-      simpleGrey: 'rgb(148, 163, 184)'
+      simpleGrey: 'rgb(148, 163, 184)',
+      arancio: 'rgb(249, 115, 22)'
     },
     fontFamily: {
       'circolo': '"KoHo", sans-serif'
