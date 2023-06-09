@@ -23,5 +23,11 @@ export function validateConfirmPasswordField(fieldName: string, fieldValue: stri
 export function validateTimeField(fieldName: string, fieldValue: string | null) {
     errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isValidRegex(fieldName, fieldValue, /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
 }
+export function validateNickNameField(fieldName: string, fieldValue: string | null) {
+    errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isValidRegex(fieldName, fieldValue, /^[A-Za-z]{2,30}$/)
+}
+export function validateTelegramTag(fieldName: string, fieldValue: string | null) {
+    errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isValidRegex(fieldName, fieldValue, /@^[A-Za-z]{2,30}$/)
+}
 export { errors };
 

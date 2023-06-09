@@ -9,9 +9,11 @@
                     <form @submit.prevent novalidate class="space-y-4 md:space-y-6" action="#">
                         <CampoNome v-model="user.name" />
                         <CampoEmail v-model="user.email" />
+                        <CampoNickname v-model="user.nickname" />
                         <CampoTelefono v-model="user.telefono" />
                         <CampoPassword v-model="user.password"/>
                         <ConfermaPassword v-model="user.confPassword"/>
+                        <CampoGender v-model="user.genere"/>
                         <button type="submit"
                             class="w-full text-white bg-bluPadelHub hover:bg-bluPadelHubHover focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:bg-graySlate"
                             @click="singupButtonPressed" :disabled="isSignupButtonDisabled">Crea Account</button>
@@ -22,7 +24,7 @@
                         </p>
                     </form>
                 </div>
-                <span v-else-if="responseError" class="text-invalidForm">{{ msg.error }}</span>
+                <span v-else-if="responseError" class="text-invalidForm">{{ }}</span>
                 <div v-else class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight">Ti è stata inviata una email con il link per
                         confermare l'account.<br />Clicca sul link per confermare l'account</h1>
@@ -38,10 +40,11 @@ import CampoEmail from "@/components/Registrazione/CampoEmail.vue";
 import CampoPassword from "@/components/Registrazione/CampoPassword.vue";
 import CampoTelefono from "@/components/Registrazione/CampoTelefono.vue";
 import ConfermaPassword from "@/components/Registrazione/ConfermaPassword.vue";
+import CampoNickname from "@/components/Registrazione/CampoNickname.vue";
+import CampoGender from "@/components/Registrazione/CampoGenere.vue.js";
 import { errors } from "@/modules/formValidation";
 import useSubmitButtonState from "@/modules/submitButtonState"
 import axios from 'axios';
-import { TipoAccount } from '@/store/auth';
 import { provide, reactive, ref } from "vue";
 import { validateConfirmPasswordField } from "@/modules/formValidation";
 import type ConfermaPasswordVue from "@/components/Registrazione/ConfermaPassword.vue";
@@ -53,7 +56,13 @@ let user = reactive({
     email: "",
     telefono: "",
     password: "",
-    confPassword: ""
+    confPassword: "",
+    nickname: "",
+    dataDiNascita:"",
+    genere:"",
+    livello:"",
+    foto:"",
+    tagTelegram:"",
 });
 
 provide('userData', user) //per passarla al componente ConfermaPassword
@@ -69,7 +78,13 @@ function singupButtonPressed() {
             nome: user.name,
             email: user.email,
             telefono: user.telefono,
-            password: user.password
+            password: user.password,
+            nickname:user.nickname,
+            dataDiNascita: user.dataDiNascita,
+            genere : user.genere,
+            livello : user.livello,
+            foto: user.foto,
+            tagTelegram : user.tagTelegram,
         }
     ).then(response => {
 

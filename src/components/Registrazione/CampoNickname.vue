@@ -1,8 +1,8 @@
 <template>
     <div class="field">
         <div>
-            <label for="CampoNome" class="block mb-2 text-sm font-medium">{{ props.label }}</label>
-            <Input type="text" name="nome" :placeholder="props.placeholder"
+            <label for="CampoNickname" class="block mb-2 text-sm font-medium">{{ props.label }}</label>
+            <Input type="text" name="nickname" :placeholder="props.placeholder"
                 autocomplete="off" v-model="input" @keyup="validateInput" @blue="validateInput" @input="$emit('update:modelValue', ($event!.target! as HTMLInputElement).value)"/>
         </div>
         <div class="text-redBusy" v-if="errors.name">
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { validateNameField, errors } from "@/modules/formValidation";
+import { validateNickNameField, errors } from "@/modules/formValidation";
 import { ref, computed, onMounted, onUpdated } from "vue";
 import { Input} from 'flowbite-vue'
 let countUpdate = 0;
@@ -23,11 +23,11 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "Nome"
+        default: "Nickname"
     },
     placeholder: {
         type: String,
-        default: "Inserisci il nome..."
+        default: "Inserisci il nickname..."
     }
 })
 
@@ -39,7 +39,7 @@ onUpdated(() => {
 
 let input = ref<string | null>(null);
 const validateInput = () => {
-    validateNameField("name", input.value);
+    validateNickNameField("nickname", input.value);
 };
 
 </script>
