@@ -12,26 +12,26 @@
         {
             title: "Struttura",
             links: [
-                { nome: "gestione campi", link: "/" },
-                { nome: "informazioni generali", link: "#" },
+                { nome: "gestione campi", link: "AreaCircolo" },
+                { nome: "informazioni generali", link: "DashCircolo" },
             ],
         },
         {
             title: "iscritti",
             links: [
-                { nome: "i miei iscritti", link: "#" },
+                { nome: "i miei iscritti", link: "DashCircolo" },
             ],
         },
         {
             title: "Statistiche",
             links: [
-                { nome: "le mie statistiche", link: "#" },
+                { nome: "le mie statistiche", link: "DashCircolo" },
             ],
         },
         {
             title: "Recensioni",
             links: [
-                { nome: "le mie recensioni", link: "#" },
+                { nome: "le mie recensioni", link: "DashCircolo" },
             ],
         },
     ])
