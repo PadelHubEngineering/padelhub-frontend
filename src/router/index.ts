@@ -31,7 +31,7 @@ const router = createRouter({
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     },
     {
-      path: '/partita/:idPartita/',
+      path: '/partite/:idPartita/',
       name: "InfoPartita",
       component: () => import('@/views/InfoPartita.vue'),
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
@@ -60,6 +60,12 @@ const router = createRouter({
       component: () => import('@/views/RicercaCircoli.vue'),
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     },
+    {
+      path: '/confermaEmail',
+      name: 'ConfermaEmail',
+      component: () => import('@/views/ConfermaEmail.vue'),
+      meta: { requiredAccount: null }
+    },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/views/NotFound.vue") },
   ],
   linkActiveClass: 'active'
@@ -68,9 +74,6 @@ const router = createRouter({
 router.beforeEach(async (to, from_route) => {
 
   const authUserStore = useAuthUserStore();
-
-  // console.log(authUserStore.authenticated)
-  // console.log( from_route.query )
 
   if( to.meta.requiredAccount !== null && !authUserStore.authenticated )
     return {
@@ -92,8 +95,6 @@ router.beforeEach(async (to, from_route) => {
     return {
       name: "Login"
     }
-
-
 
 })
 
