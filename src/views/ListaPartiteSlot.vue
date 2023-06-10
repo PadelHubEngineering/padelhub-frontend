@@ -9,6 +9,8 @@
     import type { CircoloRetI, PartitaRetI, PartiteAperteI } from "@/components/partite/Partita.types";
     import axios from "axios";
 import { useAuthUserStore } from "@/stores/authStore";
+import type { DateTime } from "luxon";
+import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
 
 
     const route = useRoute()
@@ -21,6 +23,10 @@ import { useAuthUserStore } from "@/stores/authStore";
     const giaPrenotato: Ref<boolean> = ref(false);
     const isIscritto = ref(false)
     const datiCircolo: Ref<CircoloRetI | undefined> = ref(undefined)
+
+    const tipoCampo = TipoCampo.Esterno;
+
+    const data_attuale: Ref<DateTime | null> = ref( null )
 
     async function loadPartiteSlot() {
         let response;
@@ -97,5 +103,14 @@ import { useAuthUserStore } from "@/stores/authStore";
     <hr />
 
 
-    <ListaPartiteSlot :partite="partite"></ListaPartiteSlot>
+    <div clas='mb-20 bg-bluPadelHub'>
+        <ListaPartiteSlot :partite="partite"></ListaPartiteSlot>
+    </div>
+
+    <button
+        v-on:click.prevent="router.push({ name: 'NuovaPartita', query: { dataOra: data_attuale?.toJSON() , tipoCampo: tipoCampo } })"
+        class='h-18 w-4/5 rounded-2xl bg-bluPadelHub px-4 py-3 text-3xl block bottom-3 absolute left-1/2 transform -translate-x-1/2 text-white'
+    >
+        Crea partita
+    </button>
 </template>

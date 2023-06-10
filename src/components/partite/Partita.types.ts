@@ -50,10 +50,20 @@ function getLivello(n: number) {
 
 export function stampaCategorie( categoria_min: number, categoria_max: number) {
 
+    categoria_min = parseInt( categoria_min.toString() )
+    categoria_max = parseInt( categoria_max.toString() )
+
     let ret: string[] = []
 
-    for( let i=categoria_min;i<=categoria_max;i++ )
+    console.log(categoria_min)
+    console.log(categoria_max)
+
+    if( categoria_min === categoria_max )
+        return getLivello( categoria_min )
+
+    for( let i=categoria_min;i<=categoria_max;i++ ){
         ret.push( getLivello(i) )
+    }
 
     return ret.join(", ")
 

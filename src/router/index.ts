@@ -66,6 +66,13 @@ const router = createRouter({
       component: () => import('@/views/ConfermaEmail.vue'),
       meta: { requiredAccount: null }
     },
+    {
+      path: '/nuovaPartita',
+      name: 'NuovaPartita',
+
+      component: () => import('@/views/NuovaPartita.vue'),
+      meta: { requiredAccount: null }
+    },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/views/NotFound.vue") },
   ],
   linkActiveClass: 'active'
