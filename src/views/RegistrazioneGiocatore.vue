@@ -7,12 +7,13 @@
                         Sei un Giocatore? Registrati qui
                     </h1>
                     <form @submit.prevent novalidate class="space-y-4 md:space-y-6" action="#">
-                        <CampoNome v-model="user.cognome" :placeholder="'Inserisci cognome'" :label="'Cognome'" />
+                        <CampoNome nome-campo="nome" v-model="user.nome" :label="'Nome'" />
+                        <CampoNome nome-campo="cognome" v-model="user.cognome" :placeholder="'Inserisci cognome'" :label="'Cognome'" />
                         <CampoEmail v-model="user.email" />
-                        <CampoNome v-model="user.nickname" :placeholder="'Inserisci nickname'" :label="'Nickname'" />
+                        <CampoNome nome-campo="nickname" v-model="user.nickname" :placeholder="'Inserisci nickname'" :label="'Nickname'" />
+                        <DataPicker></DataPicker>
                         <CampoPassword v-model="user.password"/>
                         <ConfermaPassword v-model="user.confPassword"/>
-                            <!-- Data di nascita -->
                             <!-- Genere -->
                         <input
                             class='' type="range" :value="user.livello" min="500" max="4500" step="1000">
@@ -50,6 +51,7 @@ import { TipoAccount } from '@/store/auth';
 import { provide, reactive, ref } from "vue";
 import { validateConfirmPasswordField } from "@/modules/formValidation";
 import type ConfermaPasswordVue from "@/components/Registrazione/ConfermaPassword.vue";
+import DataPicker from "@/components/DataPicker.vue";
 
 
 enum Genere {
@@ -73,7 +75,7 @@ type Utente = {
 
 let toSubmit = ref(true);
 let responseError: string;
-let user: Utente = reactive({
+let user = reactive({
     nome: "",
     cognome: "",
     email: "",
@@ -85,7 +87,7 @@ let user: Utente = reactive({
     foto: "", // È una stringa in base64
     tagTelegram: "",
     confPassword: "",
-}) as Utente;
+});
 
 provide('userData', user) //per passarla al componente ConfermaPassword
 
@@ -93,10 +95,10 @@ function singupButtonPressed() {
 
      console.log( user.livello )
 
-    // toSubmit.value = false;
-    //
+    toSubmit.value = false;
+    
     // if (!axios) return
-    //
+    
     // axios.post(
     //     `${import.meta.env.VITE_BACK_URL}/api/v1/giocatore/registrazioneGiocatore`,
     //     {
@@ -112,16 +114,16 @@ function singupButtonPressed() {
     //         tagTelegram: user.tagTelegram,
     //     } as Utente
     // ).then(response => {
-    //
+    
     //     console.log(response)
-    //
+    
     //     const { HTTPCode, success, message } = response.data.payload;
-    //
+    
     // }).catch(err => {
     //     const { message } = err.response.data;
     //     responseError = message
     // })
-    //
+    
 }
 const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
 

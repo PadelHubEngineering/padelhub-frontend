@@ -2,11 +2,11 @@
     <div class="field">
         <div>
             <label for="CampoNome" class="block mb-2 text-sm font-medium">{{ props.label }}</label>
-            <Input type="text" name="nome" :placeholder="props.placeholder"
+            <Input type="text"  :placeholder="props.placeholder"
                 autocomplete="off" v-model="input" @keyup="validateInput" @blue="validateInput" @input="$emit('update:modelValue', ($event!.target! as HTMLInputElement).value)"/>
         </div>
-        <div class="text-redBusy" v-if="errors.name">
-            {{ errors.name }}
+        <div class="text-redBusy" v-if="errors[props.nomeCampo]">
+            {{ errors[props.nomeCampo] }}
         </div>
     </div>
 </template>
@@ -28,6 +28,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: "Inserisci il nome..."
+    },
+    nomeCampo: {
+        required: true,
+        type: String
     }
 })
 
@@ -39,7 +43,7 @@ onUpdated(() => {
 
 let input = ref<string | null>(null);
 const validateInput = () => {
-    validateNameField("name", input.value);
+    validateNameField(props.nomeCampo, input.value);
 };
 
 </script>

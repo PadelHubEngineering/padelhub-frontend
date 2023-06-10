@@ -11,7 +11,7 @@
                     Anagrafica</h1>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 px-10 py-10 gap-6">
-                <CampoNome v-model="data.anagrafica.nome" :val="data.anagrafica.nome"></CampoNome>
+                <CampoNome nome-campo="Nome" v-model="data.anagrafica.nome" :val="data.anagrafica.nome"></CampoNome>
                 <Input placeholder="Inserisci un indirizzo" label="Indirizzo" v-model="data.anagrafica.indirizzo" />
                 <CampoTelefono v-model="data.anagrafica.telefono" :val="data.anagrafica.telefono"></CampoTelefono>
                 <CampoEmail v-model="data.anagrafica.email" :val="data.anagrafica.email"></CampoEmail>
