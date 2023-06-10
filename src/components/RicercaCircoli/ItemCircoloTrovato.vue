@@ -18,7 +18,10 @@ const props = defineProps({
     
     <div class="bg-white p-2 text-bluPadelHub border-2 border-bluPadelHub rounded-lg my-3 bg-opacity-70 w-full">
         <div class="font-semibold">
-        <PartitaHeader :iscritto="props.iscritto" :nome-circolo="props.nomeCircolo"></PartitaHeader> 
+            <PartitaHeader 
+            :iscritto="props.iscritto" 
+            :nome-circolo="props.nomeCircolo">
+            </PartitaHeader> 
         </div>
         <div v-for="tipo in props.campi">
             <ItemCampoTipo :tipo=tipo></ItemCampoTipo>

@@ -15,7 +15,6 @@
             <div class="searchInput active border-2 border-bluPadelHub rounded-lg font-circolo">
                 <input type="text" placeholder="Inserire un indirizzo" v-model="input" @input="handleSuggerimenti" />
                 <div class="resultBox">
-                    <!-- here list are inserted from javascript -->
                     <li v-for="luoghi in risultati" :key="luoghi" @click="handleRicerca(luoghi)"> {{ luoghi.label }} </li>
                 </div>
                 <div class="icon"><i class="fas fa-search"></i></div>
@@ -30,13 +29,16 @@
     </div>
 
 
-    <!-- SABRINA -->
     <div class="bg-gradient-to-r from-bluPadelHub to-arancio p-0 pt-1 bg-fixed h-screen bg-no-repeat bg-bottom">
         <div v-for="circolo in circoliTrovati">
-            <ItemCircoloTrovato :nomeCircolo="circolo.nomeCircolo" :iscritto="circolo.iscritto" :campi="circolo.campi">
-            </ItemCircoloTrovato>
+            <ItemCircoloTrovato 
+            :nomeCircolo="circolo.nomeCircolo" 
+            :iscritto="circolo.iscritto" 
+            :campi="circolo.campi">
+        </ItemCircoloTrovato>
         </div>
     </div>
+
 </template>
 
 
