@@ -29,10 +29,10 @@
 <template>
     <MobileHeader :ready="true" title="Dashboard">
         <template v-slot:leftSide>
-            <img src='/img/exit.png' class='h-5/6' v-on:click="logout" />
+            <img src='/img/exit.png' class='h-5/6 cursor-pointer' v-on:click="logout" />
         </template>
         <template v-slot:rightSide>
-            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
+            <img src='/img/logoPadelHub.png' class='cursor-pointer' v-on:click="router.push({ path: '/' })"/>
         </template>
     </MobileHeader>
 

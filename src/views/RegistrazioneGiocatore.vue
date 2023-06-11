@@ -1,4 +1,5 @@
 <template>
+    <MobileHeader :ready="true"/>
     <section class="bg-bluPadelHub h-auto">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
             <div class="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
@@ -26,7 +27,7 @@
                             </div>
                             <div class="grid grid-cols-3">
                                 <label class="block mb-2 text-sm font-medium col-span-3"> Livello di gioco </label>
-                                <input class='col-span-3' type="range" :value="user.livello" min="500" max="4500"
+                                <input class='col-span-3' type="range" v-model="user.livello" min="500" max="4500"
                                     step="1000">
                                 <label for="">Basso</label>
                                 <label for="" class="text-center">Medio</label>
@@ -86,6 +87,7 @@ import CampoEmail from "@/components/Registrazione/CampoEmail.vue";
 import CampoPassword from "@/components/Registrazione/CampoPassword.vue";
 import CampoTelefono from "@/components/Registrazione/CampoTelefono.vue";
 import ConfermaPassword from "@/components/Registrazione/ConfermaPassword.vue";
+import MobileHeader from "@/components/MobileHeader.vue";
 import { errors } from "@/modules/formValidation";
 import { useSubmitButtonState, useSubmitButtonStateGiocatore } from "@/modules/submitButtonState"
 import axios from 'axios';
@@ -161,9 +163,9 @@ function singupButtonPressed() {
                 telefono: user.telefono,
                 dataDiNascita: user.dataDiNascita, // E un date
                 genere: user.genere,
-                livello: user.livello,
+                livello: parseInt(user.livello.toString()),
                 tagTelegram: user.tagTelegram,
-                foto: " "
+                foto: ""
             } as Utente
         ).then(response => {
             toSubmit.value = false;   

@@ -66,7 +66,11 @@
         ) {
             return {}
         } else {
-            dataOra.value = DateTime.fromISO( _dataOra )
+
+            const d_no = DateTime.fromISO( _dataOra )
+            const { year, month, day, hour, minute } = d_no;
+
+            dataOra.value = DateTime.fromObject({ year, month, day, hour, minute }, { zone: "UTC+0" }).setZone("UTC+0")
             tipoCampo.value = _tipoCampo
             idCircolo.value = _idCircolo,
             nomeCircolo.value = _nomeCircolo
@@ -171,7 +175,7 @@
                     "categoria_max" : c_max,
 
                     "orario" : dataOra.value?.toJSON(),
-                    "tipoCampo": tipoCampo.value
+                    "tipocampo": tipoCampo.value
                 },
                 {
                     headers: {
@@ -180,14 +184,14 @@
                 }
             )
         } catch (error: any) {
-            console.log("Impossibile creare la partita " + error.response.data.status)
+            console.log( error.response.data.message )
+            errorMessage.value = error.response.data.message || "Errore generico"
             isErrored.value = true;
         }
 
         console.log(response)
 
         if ( response === undefined || !response.data.success ){
-            isErrored.value = true;
             return false;
         } else {
 
@@ -229,10 +233,10 @@
 
     <MobileHeader :ready="true" :title='"Nuova partita"'>
         <template v-slot:leftSide>
-            <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
+            <img src='/img/indietro_white.png' class='cursor-pointer' v-on:click="router.go(-1)">
         </template>
         <template v-slot:rightSide>
-            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
+            <img src='/img/logoPadelHub.png' class='cursor-pointer' v-on:click="router.push({ path: '/' })"/>
         </template>
     </MobileHeader>
 
