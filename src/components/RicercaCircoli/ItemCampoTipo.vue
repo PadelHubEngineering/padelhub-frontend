@@ -49,50 +49,6 @@
             durataSlot: 0
         },
         slots: []
-        // "circolo": {
-        //     _id: '647cc2d139db5e20457b309e',
-        //     "orarioApertura": "1899-12-31T08:00:00.000Z",
-        //     "orarioChiusura": "1899-12-31T17:00:00.000Z",
-        //     "durataSlot": 90
-        // },
-        // "slots": [
-        //     {
-        //         "inizioSlot": "2023-07-09T08:00:00.000Z",
-        //         "fineSlot": "2023-07-09T09:30:00.000Z",
-        //         "disponibile": true,
-        //         "partiteAperte": 0
-        //     },
-        //     {
-        //         "inizioSlot": "2023-07-09T09:30:00.000Z",
-        //         "fineSlot": "2023-07-09T11:00:00.000Z",
-        //         "disponibile": false,
-        //         "partiteAperte": 0
-        //     },
-        //     {
-        //         "inizioSlot": "2023-07-09T11:00:00.000Z",
-        //         "fineSlot": "2023-07-09T12:30:00.000Z",
-        //         "disponibile": true,
-        //         "partiteAperte": 1
-        //     },
-        //     {
-        //         "inizioSlot": "2023-07-09T12:30:00.000Z",
-        //         "fineSlot": "2023-07-09T14:00:00.000Z",
-        //         "disponibile": true,
-        //         "partiteAperte": 0
-        //     },
-        //     {
-        //         "inizioSlot": "2023-07-09T14:00:00.000Z",
-        //         "fineSlot": "2023-07-09T15:30:00.000Z",
-        //         "disponibile": true,
-        //         "partiteAperte": 0
-        //     },
-        //     {
-        //         "inizioSlot": "2023-07-09T15:30:00.000Z",
-        //         "fineSlot": "2023-07-09T17:00:00.000Z",
-        //         "disponibile": true,
-        //         "partiteAperte": 0
-        //     }
-        // ]
     })
 
     async function toggleOpen () {

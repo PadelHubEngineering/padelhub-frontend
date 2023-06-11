@@ -93,12 +93,14 @@ import MobileHeader from '@/components/MobileHeader.vue';
 </script>
 
 <template>
-    <MobileHeader />
-  <div id="visa">
-    <h1 class="text-bluPadelHub font-bold text-xl text-center">Login</h1>
+    <MobileHeader/>
+<div class="flex justify-center items-center place-items-center"> 
+
+  <div id="visa" class="place-items-center bg-white shadow-lg max-w-lg mt-10 rounded-[12px] w-4/5">
+    <h1 class="text-white bg-bluPadelHub font-bold text-xl text-center py-5  rounded-[12px] font-circolo">LOGIN</h1>
     <br><br>
-    <form @submit.prevent="handleSubmission" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <label for="email" class="font-bold text-bluPadelHub">La tua email</label>
+    <form @submit.prevent="handleSubmission" class="px-5   pt-6 mb-4">
+      <label for="email" class="font-bold font-circolo text-bluPadelHub">La tua email</label>
       <input
         type="text"
         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
@@ -113,20 +115,27 @@ import MobileHeader from '@/components/MobileHeader.vue';
       >{{ msg.email }}</span>
 
       <br>
-      <label for="password" class="font-bold text-bluPadelHub">Password</label>
+      <label for="password" class="font-bold font-circolo text-bluPadelHub">Password</label>
       <input type="password" pattern="[A-Za-z\d@$!%*?&]{1,30}"
         class="border-bluPadelHub invalid:border-invalidForm  invalid:text-invalidForm 
                focus:invalid:border-invalidForm  focus:invalid:ring-invalidForm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder:italic"
         v-model="password" required><br>
-      <span v-if="msg.password" class="italic text-xs">{{ msg.password }}</span>
+      <span v-if="msg.password" class="italic text-xs text-center">{{ msg.password }}</span>
       <br>
-      <span v-if="msg.error" class="text-invalidForm">{{ msg.error }}</span>
+      <span v-if="msg.error" class="text-invalidForm text-center">{{ msg.error }}</span>
       <br><br>
       <input
-        class="shadow bg-bluPadelHub enabled:hover:bg-bluPadelHubHover text-white font-bold py-3 w-full rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
-        type="submit" :disabled="!disabled.every((i: any) => i === false)" v-on:click.prevent="login()" />
+        class="shadow bg-bluPadelHub enabled:hover:bg-bluPadelHubHover text-white font-circolo font-bold py-3 w-full rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
+        type="submit" :disabled="!disabled.every((i: any) => i === false)" v-on:click.prevent="login()" /> 
     </form>
+    <div class="flex flex-col space-y-3 mt-10 bg-bluPadelHub p-5 rounded-[12px] px-4 flex justify-center items-center">
+        <p class="text-center text-white mb-4 font-circolo">Non sei ancora registrato?</p>
+        <router-link :to="{ name: 'RegistrazioneGiocatore'}"><button class="text-bluPadelHub bg-white rounded-[12px] p-2 px-10 shadow-lg font-bold font-circolo">Registrati come GIOCATORE</button></router-link>
+        <router-link :to="{ name: 'RegistrazioneCircolo'}"><button class="text-bluPadelHub bg-white rounded-[12px] p-2 px-10 shadow-lg font-bold font-circolo">Registrati come CIRCOLO</button></router-link>
+     </div>
   </div>
+</div>    
+
 </template>
 
 
