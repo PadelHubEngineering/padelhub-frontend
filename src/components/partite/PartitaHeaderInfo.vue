@@ -13,7 +13,8 @@ import { computed } from 'vue';
 
         if ( !props.dataOraInizioPartita ) return ""
 
-        return `${props.dataOraInizioPartita.getDay().toString().padStart(2, "0")}/${props.dataOraInizioPartita.getMonth().toString().padStart(2, "0")}/${props.dataOraInizioPartita.getFullYear()}`
+
+        return `${props.dataOraInizioPartita.getDate().toString().padStart(2, "0")}/${(props.dataOraInizioPartita.getMonth() + 1).toString().padStart(2, "0")}/${props.dataOraInizioPartita.getFullYear()}`
     } )
 
     const oraSlot = computed( () => {

@@ -19,6 +19,12 @@ const router = createRouter({
       meta: { requiredAccount: [ TipoAccount.Giocatore ]}
     },
     {
+      path: '/dashGiocatore/prenotazioniEffettuate',
+      name: 'PrenotazioniEffettuate',
+      component: () => import('@/views/ListaPrenotazioniGiocatore.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ]}
+    },
+    {
       path: '/dashCircolo',
       name: 'DashboardCircolo',
       component: () => import('@/views/DashboardCircolo.vue'),
@@ -31,7 +37,7 @@ const router = createRouter({
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
     },
     {
-      path: '/partita/:idPartita/',
+      path: '/partite/:idPartita/',
       name: "InfoPartita",
       component: () => import('@/views/InfoPartita.vue'),
       meta: { requiredAccount: [ TipoAccount.Giocatore ] }
@@ -53,7 +59,27 @@ const router = createRouter({
       name: 'AreaCircolo',
       component: () => import('@/views/AreaCircolo.vue'),
       meta: { requiredAccount: [ TipoAccount.Circolo ] }
-    }
+    },
+    {
+      path: '/RicercaCircoli',
+      name: 'RicercaCircoli',
+      component: () => import('@/views/RicercaCircoli.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ] }
+    },
+    {
+      path: '/confermaEmail',
+      name: 'ConfermaEmail',
+      component: () => import('@/views/ConfermaEmail.vue'),
+      meta: { requiredAccount: null }
+    },
+    {
+      path: '/nuovaPartita',
+      name: 'NuovaPartita',
+
+      component: () => import('@/views/NuovaPartita.vue'),
+      meta: { requiredAccount: null }
+    },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/views/NotFound.vue") },
   ],
   linkActiveClass: 'active'
 })
@@ -62,16 +88,26 @@ router.beforeEach(async (to, from_route) => {
 
   const authUserStore = useAuthUserStore();
 
-  // console.log(authUserStore.authenticated)
-  // console.log( from_route.query )
-
   if( to.meta.requiredAccount !== null && !authUserStore.authenticated )
     return {
       name: "Login",
       // save the location we were at to come back later
-      query: { redirect: to.fullPath },
+      query: { redirect: to.path === "/"? undefined : to.fullPath },
     }
-  //else if ( from_route.query )
+
+  else if( to.name === "Login" && authUserStore.authenticated ) {
+
+    if( authUserStore.tipoAccount === TipoAccount.Giocatore )
+      return { name: "DashboardGiocatore" }
+
+    else if( authUserStore.tipoAccount === TipoAccount.Circolo )
+      return { name: "DashboardCircolo" }
+  }
+
+  else if ( to.path === "/" )
+    return {
+      name: "Login"
+    }
 
 })
 

@@ -3,6 +3,7 @@
     import CircoloMenuComponent from "@/components/CircoloMenuItems/CircoloMenuComponent.vue"
     import SlotGrid from "@/components/GestioneSlot/SlotGrid.vue";
     import DataPicker from "@/components/DataPicker.vue";
+    import NonValidato from "@/components/NonValidato.vue";
     import DataPickerVue from "@/components/DataPicker.vue";
     import axios, { type AxiosResponse } from "axios";
     import { onMounted, ref, type Ref } from "vue";
@@ -60,7 +61,7 @@ import { useAuthUserStore } from "@/stores/authStore";
             console.log(message)
         }
 
-        console.log(response)
+    
         if ( response ) {
             findFasceOrarie(response.data)
             createMap(response.data)
@@ -149,6 +150,7 @@ import { useAuthUserStore } from "@/stores/authStore";
         <CircoloMenuComponent  class='w-1/5 min-w-[300px]'/>
 
         <div class="w-4/5 max-w-4/5 ml-5 mt-5 overflow-x-auto">
+            <NonValidato />
             <DataPickerVue v-model="date" @update="sendRequestToBack"></DataPickerVue>
             <br><br>
             <SlotGrid 

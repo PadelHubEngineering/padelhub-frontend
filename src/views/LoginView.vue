@@ -3,6 +3,7 @@
 import { reactive, ref } from 'vue';
     import { useRouter } from "vue-router"
     import axios, { AxiosError } from "axios"
+import MobileHeader from '@/components/MobileHeader.vue';
 
     const router = useRouter();
     const authUserStore = useAuthUserStore()
@@ -92,6 +93,7 @@ import { reactive, ref } from 'vue';
 </script>
 
 <template>
+    <MobileHeader />
   <div id="visa">
     <h1 class="text-bluPadelHub font-bold text-xl text-center">Login</h1>
     <br><br>
