@@ -23,8 +23,8 @@ export default {
     const dateValue = moment()
     const daysInMonth = ref(dateValue.daysInMonth())
 
-    const startingYear = 2023
-    const numberofYears = 4
+    const startingYear = 1900;
+    const numberofYears = 200
 
     const editValue = (unit:any, evt:any) => {
         dateValue.set(unit, evt.target.value)
