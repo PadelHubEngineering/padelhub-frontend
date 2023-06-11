@@ -27,17 +27,16 @@
         console.log("DataInizio: " + props.dataInizio)
         console.log("DataFine: " + props.dataFine)
     // path: '/partite/circolo/:circolo/data/:year/:month/:day/:hour/:minutes/',
-    // name: "PartiteSlot",
-        // router.push({ name: "PartiteSlot",
-        //     params: {
-        //         circolo: props.idCircolo,
-        //         year: props.dataInizio.getFullYear().toString(),
-        //         month: props.dataInizio.getMonth().toString(),
-        //         day: props.dataInizio.getDate().toString(),
-        //         hour: props.dataInizio.getHours().toString(),
-        //         minutes: props.dataInizio.getMinutes().toString(),
-        //     }
-        // })
+        router.push({ name: "PartiteSlot",
+            params: {
+                circolo: props.idCircolo,
+                year: props.dataInizio.getFullYear().toString(),
+                month: props.dataInizio.getMonth().toString(),
+                day: props.dataInizio.getDate().toString(),
+                hour: props.dataInizio.getHours().toString(),
+                minutes: props.dataInizio.getMinutes().toString(),
+            }
+        })
     }
 
     const oraInizio = computed( () => {
