@@ -26,7 +26,7 @@
                             </div>
                             <div class="grid grid-cols-3">
                                 <label class="block mb-2 text-sm font-medium col-span-3"> Livello di gioco </label>
-                                <input class='col-span-3' type="range" :value="user.livello" min="500" max="4500"
+                                <input class='col-span-3' type="range" v-model="user.livello" min="500" max="4500"
                                     step="1000">
                                 <label for="">Basso</label>
                                 <label for="" class="text-center">Medio</label>
@@ -161,9 +161,9 @@ function singupButtonPressed() {
                 telefono: user.telefono,
                 dataDiNascita: user.dataDiNascita, // E un date
                 genere: user.genere,
-                livello: user.livello,
+                livello: parseInt(user.livello.toString()),
                 tagTelegram: user.tagTelegram,
-                foto: " "
+                foto: ""
             } as Utente
         ).then(response => {
             toSubmit.value = false;   
