@@ -31,7 +31,7 @@
             params: {
                 circolo: props.idCircolo,
                 year: props.dataInizio.getFullYear().toString(),
-                month: props.dataInizio.getMonth().toString(),
+                month: ( props.dataInizio.getMonth() + 1 ).toString(),
                 day: props.dataInizio.getDate().toString(),
                 hour: props.dataInizio.getHours().toString(),
                 minutes: props.dataInizio.getMinutes().toString(),
