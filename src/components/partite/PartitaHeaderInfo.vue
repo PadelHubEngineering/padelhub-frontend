@@ -21,8 +21,8 @@ import { computed } from 'vue';
 
         if ( !props.dataOraInizioPartita || !props.oraFinePartita ) return ""
 
-        const oraInizio = `${props.dataOraInizioPartita.getHours().toString().padStart(2, "0")}:${props.dataOraInizioPartita.getMinutes().toString().padStart(2, "0")}`
-        const oraFine = `${props.oraFinePartita.getHours().toString().padStart(2, "0")}:${props.oraFinePartita.getMinutes().toString().padStart(2, "0")}`
+        const oraInizio = `${props.dataOraInizioPartita.getUTCHours().toString().padStart(2, "0")}:${props.dataOraInizioPartita.getUTCMinutes().toString().padStart(2, "0")}`
+        const oraFine = `${props.oraFinePartita.getUTCHours().toString().padStart(2, "0")}:${props.oraFinePartita.getUTCMinutes().toString().padStart(2, "0")}`
 
         return `${oraInizio} - ${oraFine}`
     })
