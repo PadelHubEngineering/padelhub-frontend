@@ -19,6 +19,12 @@ const router = createRouter({
       meta: { requiredAccount: [ TipoAccount.Giocatore ]}
     },
     {
+      path: '/dashGiocatore/prenotazioniEffettuate',
+      name: 'PrenotazioniEffettuate',
+      component: () => import('@/views/ListaPrenotazioniGiocatore.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ]}
+    },
+    {
       path: '/dashCircolo',
       name: 'DashboardCircolo',
       component: () => import('@/views/DashboardCircolo.vue'),

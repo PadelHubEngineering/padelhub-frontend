@@ -98,6 +98,9 @@ import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
         <template v-slot:leftSide>
             <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
         </template>
+        <template v-slot:rightSide>
+            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
+        </template>
     </MobileHeader>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="datiCircolo?.nome"/>
