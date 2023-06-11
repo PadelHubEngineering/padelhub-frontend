@@ -48,7 +48,7 @@
 
     <div class='grid-rows-2 grid-cols-2 grid gap-2 p-2'>
         <router-link :class="[ buttonClass ]" :to="{ name: 'PrenotazioniEffettuate' }">Gestione partite</router-link>
-        <router-link :class="[ buttonClass ]" :to="{ name: 'CircoliAssociati' }">Circoli associati</router-link>
+        <button :class="[ buttonClass ]" >Circoli associati</button>
         <button :class="[ buttonClass ]" >Community</button>
         <button :class="[ buttonClass ]" >Account</button>
     </div>
