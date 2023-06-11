@@ -1,4 +1,5 @@
 <template>
+    <MobileHeader :ready="true"/>
     <section class="bg-bluPadelHub h-auto">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
             <div class="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
@@ -86,6 +87,7 @@ import CampoEmail from "@/components/Registrazione/CampoEmail.vue";
 import CampoPassword from "@/components/Registrazione/CampoPassword.vue";
 import CampoTelefono from "@/components/Registrazione/CampoTelefono.vue";
 import ConfermaPassword from "@/components/Registrazione/ConfermaPassword.vue";
+import MobileHeader from "@/components/MobileHeader.vue";
 import { errors } from "@/modules/formValidation";
 import { useSubmitButtonState, useSubmitButtonStateGiocatore } from "@/modules/submitButtonState"
 import axios from 'axios';

@@ -66,10 +66,10 @@ import { DateTime } from 'luxon';
 
     <MobileHeader :ready="true" title='Gioca'>
         <template v-slot:leftSide>
-            <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
+            <img src='/img/indietro_white.png' class='cursor-pointer' v-on:click="router.go(-1)">
         </template>
         <template v-slot:rightSide>
-            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
+            <img src='/img/logoPadelHub.png' class='cursor-pointer' v-on:click="router.push({ path: '/' })"/>
         </template>
     </MobileHeader>
 

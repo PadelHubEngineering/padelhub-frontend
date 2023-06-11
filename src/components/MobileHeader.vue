@@ -24,7 +24,7 @@ import { useRouter } from 'vue-router';
         </div>
 
         <div v-if='props.title && props.ready' class='text-2xl text-white uppercase font-bold drop-shadow-lg'>{{ title }}</div>
-        <img v-else-if='!props.title' src='/img/logoPadelHub.png' class='h-5/6' v-on:click="router.push({ path: '/' })">
+        <img v-else-if='!props.title' src='/img/logoPadelHub.png' class='h-5/6 cursor-pointer' v-on:click="router.push({ path: '/' })">
 
         <div :class="sidesStyle">
             <slot name='rightSide'></slot>
