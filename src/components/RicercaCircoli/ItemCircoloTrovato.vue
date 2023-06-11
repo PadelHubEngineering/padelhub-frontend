@@ -8,7 +8,9 @@ import PartitaHeader from '../partite/PartitaHeader.vue';
 const props = defineProps({
         nomeCircolo: { type: String, required: false },
         iscritto: { type: Boolean, required: false },
-        campi: { type: Array<TipoCampo>, required:false}
+        campi: { type: Array<TipoCampo>, required:false},
+        date: { type: String, required:false},
+        idCircolo: { type: String, required:false},
     })
 
 </script>
@@ -24,7 +26,10 @@ const props = defineProps({
             </PartitaHeader> 
         </div>
         <div v-for="tipo in props.campi">
-            <ItemCampoTipo :tipo=tipo></ItemCampoTipo>
+            <ItemCampoTipo 
+            :tipo=tipo 
+            :date=date 
+            :idCircolo=idCircolo></ItemCampoTipo>
         </div>
     </div>
 </template>

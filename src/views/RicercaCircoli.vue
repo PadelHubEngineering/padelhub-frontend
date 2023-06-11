@@ -34,7 +34,9 @@
             <ItemCircoloTrovato 
             :nomeCircolo="circolo.nomeCircolo" 
             :iscritto="circolo.iscritto" 
-            :campi="circolo.campi">
+            :campi="circolo.campi"
+            :date=data2
+            :idCircolo="circolo._id">
         </ItemCircoloTrovato>
         </div>
     </div>
@@ -69,6 +71,7 @@ const searchProvider = new BingProvider({
 });
 
 interface circoloTrovato {
+    _id: String,
     nomeCircolo: string,
     iscritto: boolean,
     campi: TipoCampo[]
@@ -82,6 +85,7 @@ let risultati = reactive({})
 let cliccatoSuggestion = ref(false)
 let isFree = 0;
 let data: string;
+let data2: string;
 let circoliList: any[] = []
 let location = {
     x: null,
@@ -92,6 +96,7 @@ let circoloSet: string | null = null
 async function updateDate(dataValue: Date) {
     let mese = dataValue.getMonth() + 1
     data = dataValue.getFullYear() + "/" + mese.toString().padStart(2, '0') + "/" + (dataValue.getDate()).toString().padStart(2, '0')
+    data2 =  dataValue.getFullYear() + "-" + mese.toString().padStart(2, '0') + "-" + (dataValue.getDate()).toString().padStart(2, '0')
 }
 
 async function handleSuggerimenti() {
@@ -186,6 +191,7 @@ async function ricercaCircoli() {
         response.data.payload.forEach((circolo: any) => {
 
             let circoloTrovato: circoloTrovato = {
+                _id: circolo._id,
                 nomeCircolo: circolo.nome,
                 iscritto: circolo.iscritto,
                 campi: []

@@ -1,8 +1,12 @@
 <script setup lang="ts">
     import {TipoCampo} from "./TipoCampo.types"
-    import {computed, ref} from 'vue'
+    import {computed, ref, reactive, type PropType} from 'vue'
     import ItemSlotCircolo from "@/components/RicercaCircoli/ItemSlotCircolo.vue"
     import { DateTime, Interval } from "luxon"
+    import axios, { AxiosError} from "axios"
+    import { useAuthUserStore } from "@/stores/authStore";
+
+    const authUserStore = useAuthUserStore()
 
     const campoButton = "campi";
 
@@ -11,67 +15,67 @@
         Yellow = "yellowReserved",
         Red = "redBusy"
     }
-
-    const props = defineProps(['tipo', 'date']);
+   
+    const props = defineProps({
+            tipo: { type: String as PropType<TipoCampo>, required:false},
+            date: { type: String, required:false},
+            idCircolo: { type: String, required:false},
+        })
 
     const isOpen = ref(false)
 
-    function findDatiSlot(){
-
-        
-
+    interface Slot {
+        inizioSlot: string,
+        fineSlot: string,
+        disponibile: boolean,
+        partiteAperte: number
     }
 
-
-    const datiSlotCircolo = ref({
-        "circolo": {
-            _id: '647cc2d139db5e20457b309e',
-            "orarioApertura": "1899-12-31T08:00:00.000Z",
-            "orarioChiusura": "1899-12-31T17:00:00.000Z",
-            "durataSlot": 90
+    interface Dati {
+        circolo: {
+            _id: string,
+            orarioApertura: string,
+            orarioChiusura: string,
+            durataSlot: number
         },
-        "slots": [
-            {
-                "inizioSlot": "2023-07-09T08:00:00.000Z",
-                "fineSlot": "2023-07-09T09:30:00.000Z",
-                "disponibile": true,
-                "partiteAperte": 0
-            },
-            {
-                "inizioSlot": "2023-07-09T09:30:00.000Z",
-                "fineSlot": "2023-07-09T11:00:00.000Z",
-                "disponibile": false,
-                "partiteAperte": 0
-            },
-            {
-                "inizioSlot": "2023-07-09T11:00:00.000Z",
-                "fineSlot": "2023-07-09T12:30:00.000Z",
-                "disponibile": true,
-                "partiteAperte": 1
-            },
-            {
-                "inizioSlot": "2023-07-09T12:30:00.000Z",
-                "fineSlot": "2023-07-09T14:00:00.000Z",
-                "disponibile": true,
-                "partiteAperte": 0
-            },
-            {
-                "inizioSlot": "2023-07-09T14:00:00.000Z",
-                "fineSlot": "2023-07-09T15:30:00.000Z",
-                "disponibile": true,
-                "partiteAperte": 0
-            },
-            {
-                "inizioSlot": "2023-07-09T15:30:00.000Z",
-                "fineSlot": "2023-07-09T17:00:00.000Z",
-                "disponibile": true,
-                "partiteAperte": 0
-            }
-        ]
+        slots: Slot[]
+    }
+
+    let datiSlotCircolo: Dati = reactive({
+        circolo: {
+            _id: "",
+            orarioApertura: "",
+            orarioChiusura: "",
+            durataSlot: 0
+        },
+        slots: []
     })
 
-    function toggleOpen () {
+    async function toggleOpen () {
         isOpen.value = !isOpen.value
+        if(isOpen){
+            let response = null;
+
+            try{
+                response = await axios.get(
+                    `${import.meta.env.VITE_BACK_URL}/api/v1/giocatore/getSlot?idCircolo=${props.idCircolo}&data=${props.date}&campo=${props.tipo}`,
+                    {
+                        headers: {
+                            'x-access-token': authUserStore.token
+                        }
+                    }
+                )
+            } catch(err) {
+                let act_err = err as AxiosError
+                const data: any = act_err.response?.data;
+                console.log(data.message)
+            }
+
+            if( response != null ) {
+                datiSlotCircolo.circolo = response.data.payload.circolo
+                datiSlotCircolo.slots = response.data.payload.slots
+            }
+        }
     }
 
     const tipoCampoMessage = computed(()=> {
@@ -80,17 +84,17 @@
 
     //Funzione per calcolare le fasce orarie dei vari slots
     const slots = computed(() => {
-        let inizioString = datiSlotCircolo.value.circolo.orarioApertura;
+        let inizioString = datiSlotCircolo.circolo.orarioApertura;
         let splitInizioString = inizioString.split(".");
 
-        let fineString = datiSlotCircolo.value.circolo.orarioChiusura;
+        let fineString = datiSlotCircolo.circolo.orarioChiusura;
         let splitFineString = fineString.split(".")
 
         const startDateTime = DateTime.fromJSDate( new Date(splitInizioString[0])); 
         console.log("Start date time: " + startDateTime)
         const interval = Interval.fromDateTimes( startDateTime, DateTime.fromJSDate(new Date(splitFineString[0])));
 
-        return interval.splitBy({ minutes: datiSlotCircolo.value.circolo.durataSlot }).map(
+        return interval.splitBy({ minutes: datiSlotCircolo.circolo.durataSlot }).map(
             e => ({ start: e.start?.toJSDate(), end: e.end?.toJSDate() })
         ) as { start: Date, end: Date }[]
     })

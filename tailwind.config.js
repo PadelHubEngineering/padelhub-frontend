@@ -14,6 +14,9 @@ module.exports = {
       backgroundImage: {
         'login': "url('/img/sfondoLogin.png')",
         'ricercaCircoli': "url('/img/bgRicercaCircoli.jpg')"
+      },
+      maxWidth: {
+        '1/2': '50%',
       }
     },
     colors: {
