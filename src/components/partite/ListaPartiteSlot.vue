@@ -14,7 +14,7 @@
 
 <template>
     <div v-for="p in props.partite">
-        <router-link :to='"/partita/" + p._id'>
+        <router-link :to="{ name: 'InfoPartita', params: { idPartita: p._id  } }">
             <PartitaListItem :partita="p" @on.click="" />
         </router-link>
     </div>

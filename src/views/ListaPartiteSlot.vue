@@ -9,7 +9,7 @@
     import type { CircoloRetI, PartitaRetI, PartiteAperteI } from "@/components/partite/Partita.types";
     import axios from "axios";
 import { useAuthUserStore } from "@/stores/authStore";
-import type { DateTime } from "luxon";
+import { DateTime } from "luxon";
 import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
 
 
@@ -53,6 +53,8 @@ import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
             hour.padStart(2, "0"),
             minutes.padStart(2, "0"),
         ].join("-")
+
+        data_attuale.value = DateTime.fromObject({ year: parseInt( year ), month: parseInt( month ), day: parseInt( day ), hour: parseInt( hour ), minute: parseInt( minutes ) });
 
         console.log("la mia data api", data_api)
 
@@ -108,7 +110,7 @@ import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
     </div>
 
     <button
-        v-on:click.prevent="router.push({ name: 'NuovaPartita', query: { dataOra: data_attuale?.toJSON() , tipoCampo: tipoCampo } })"
+        v-on:click.prevent="router.push({ name: 'NuovaPartita', query: { dataOra: data_attuale?.toJSON() , tipoCampo: tipoCampo, idCircolo: datiCircolo?._id, nomeCircolo: datiCircolo?.nome } })"
         class='h-18 w-4/5 rounded-2xl bg-bluPadelHub px-4 py-3 text-3xl block bottom-3 absolute left-1/2 transform -translate-x-1/2 text-white'
     >
         Crea partita

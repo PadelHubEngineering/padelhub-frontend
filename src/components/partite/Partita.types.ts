@@ -15,6 +15,8 @@ export class CircoloRetI {
     nome!: string
     durataSlot!: number
     costoPrenotazione!: number
+    email!: string
+    costoPrenotazioneAffiliato!: number
 }
 
 export type GiocatoreRetI = {
@@ -22,7 +24,8 @@ export type GiocatoreRetI = {
     cognome: string,
     nickname: string,
     foto: string,
-    email: string
+    email: string,
+    categoria: number
 }
 
 export type PartiteAperteI = {
