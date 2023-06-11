@@ -114,8 +114,8 @@
         if( pagato ) {
             isInPagamento.value = true
             await pollingPagamento()
-        // intervalPagato = window.setInterval(pollingPagamento, 1500)
-            window.setTimeout( ()=> { isPagato.value = true }, 5000 );
+            intervalPagato = window.setInterval(pollingPagamento, 1500)
+        // window.setTimeout(() => { isPagato.value = true }, 5000);
         }
 
     } )
