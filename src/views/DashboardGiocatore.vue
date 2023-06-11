@@ -2,8 +2,9 @@
     import { useAuthUserStore } from '@/stores/authStore';
     import { computed } from 'vue';
     import MobileHeader from "@/components/MobileHeader.vue"
-    import { useRouter } from 'vue-router';
+    import { useRouter, RouterLink } from 'vue-router';
     import IconSearch from "@/components/icons/IconSearch.vue"
+
 
     const userAuthStore = useAuthUserStore();
     const router = useRouter();
@@ -31,7 +32,7 @@
             <img src='/img/exit.png' class='h-5/6' v-on:click="logout" />
         </template>
         <template v-slot:rightSide>
-            <img src='/img/logoPadelHub.png' />
+            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
         </template>
     </MobileHeader>
 
@@ -46,7 +47,7 @@
     </button>
 
     <div class='grid-rows-2 grid-cols-2 grid gap-2 p-2'>
-        <button :class="[ buttonClass ]" >Gestione partite</button>
+        <router-link :class="[ buttonClass ]" :to="{ name: 'PrenotazioniEffettuate' }">Gestione partite</router-link>
         <button :class="[ buttonClass ]" >Circoli associati</button>
         <button :class="[ buttonClass ]" >Community</button>
         <button :class="[ buttonClass ]" >Account</button>

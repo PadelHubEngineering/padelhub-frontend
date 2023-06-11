@@ -8,7 +8,11 @@
     import MobileHeader from "@/components/MobileHeader.vue"
     import type { CircoloRetI, PartitaRetI, PartiteAperteI } from "@/components/partite/Partita.types";
     import axios from "axios";
-    import { useAuthUserStore } from "@/stores/authStore";
+
+import { useAuthUserStore } from "@/stores/authStore";
+import { DateTime } from "luxon";
+import { TipoCampo } from "@/components/RicercaCircoli/TipoCampo.types";
+
 
 
     const route = useRoute()
@@ -21,6 +25,10 @@
     const giaPrenotato: Ref<boolean> = ref(false);
     const isIscritto = ref(false)
     const datiCircolo: Ref<CircoloRetI | undefined> = ref(undefined)
+
+    const tipoCampo = TipoCampo.Esterno;
+
+    const data_attuale: Ref<DateTime | null> = ref( null )
 
     async function loadPartiteSlot() {
         let response;
@@ -47,6 +55,8 @@
             hour.padStart(2, "0"),
             minutes.padStart(2, "0"),
         ].join("-")
+
+        data_attuale.value = DateTime.fromObject({ year: parseInt( year ), month: parseInt( month ), day: parseInt( day ), hour: parseInt( hour ), minute: parseInt( minutes ) });
 
         console.log("la mia data api", data_api)
 
@@ -90,6 +100,9 @@
         <template v-slot:leftSide>
             <img src='/img/indietro_white.png' v-on:click="router.go(-1)">
         </template>
+        <template v-slot:rightSide>
+            <img src='/img/logoPadelHub.png' v-on:click="router.push({ path: '/' })"/>
+        </template>
     </MobileHeader>
 
     <PartitaHeader :iscritto="isIscritto" :nomeCircolo="datiCircolo?.nome"/>
@@ -97,5 +110,14 @@
     <hr />
 
 
-    <ListaPartiteSlot :partite="partite"></ListaPartiteSlot>
+    <div clas='mb-20 bg-bluPadelHub'>
+        <ListaPartiteSlot :partite="partite"></ListaPartiteSlot>
+    </div>
+
+    <button
+        v-on:click.prevent="router.push({ name: 'NuovaPartita', query: { dataOra: data_attuale?.toJSON() , tipoCampo: tipoCampo, idCircolo: datiCircolo?._id, nomeCircolo: datiCircolo?.nome } })"
+        class='h-18 w-4/5 rounded-2xl bg-bluPadelHub px-4 py-3 text-3xl block bottom-3 absolute left-1/2 transform -translate-x-1/2 text-white'
+    >
+        Crea partita
+    </button>
 </template>

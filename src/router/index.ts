@@ -19,6 +19,12 @@ const router = createRouter({
       meta: { requiredAccount: [ TipoAccount.Giocatore ]}
     },
     {
+      path: '/dashGiocatore/prenotazioniEffettuate',
+      name: 'PrenotazioniEffettuate',
+      component: () => import('@/views/ListaPrenotazioniGiocatore.vue'),
+      meta: { requiredAccount: [ TipoAccount.Giocatore ]}
+    },
+    {
       path: '/dashCircolo',
       name: 'DashboardCircolo',
       component: () => import('@/views/DashboardCircolo.vue'),
@@ -64,6 +70,13 @@ const router = createRouter({
       path: '/confermaEmail',
       name: 'ConfermaEmail',
       component: () => import('@/views/ConfermaEmail.vue'),
+      meta: { requiredAccount: null }
+    },
+    {
+      path: '/nuovaPartita',
+      name: 'NuovaPartita',
+
+      component: () => import('@/views/NuovaPartita.vue'),
       meta: { requiredAccount: null }
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/views/NotFound.vue") },

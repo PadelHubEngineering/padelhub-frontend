@@ -7,7 +7,7 @@
                         Sei un circolo? Registra qui la tua struttura
                     </h1>
                     <form @submit.prevent novalidate class="space-y-4 md:space-y-6" action="#">
-                        <CampoNome v-model="user.name" />
+                        <CampoNome nome-campo="name" v-model="user.name" />
                         <CampoEmail v-model="user.email" />
                         <CampoTelefono v-model="user.telefono" />
                         <CampoPassword v-model="user.password"/>
@@ -40,7 +40,7 @@ import CampoPassword from "@/components/Registrazione/CampoPassword.vue";
 import CampoTelefono from "@/components/Registrazione/CampoTelefono.vue";
 import ConfermaPassword from "@/components/Registrazione/ConfermaPassword.vue";
 import { errors } from "@/modules/formValidation";
-import useSubmitButtonState from "@/modules/submitButtonState"
+import  { useSubmitButtonState } from "@/modules/submitButtonState"
 import axios from 'axios';
 import { TipoAccount } from '@/store/auth';
 import { provide, reactive, ref } from "vue";
@@ -59,12 +59,12 @@ let user = reactive({
 
 provide('userData', user) //per passarla al componente ConfermaPassword
 
-function singupButtonPressed() {
-    toSubmit.value = false;
+async function singupButtonPressed() {
+    //toSubmit.value = false;
 
     if (!axios) return
 
-    axios.post(
+    const response = await axios.post(
         `${import.meta.env.VITE_BACK_URL}/api/v1/circolo/registrazioneCircolo`,
         {
             nome: user.name,
@@ -72,16 +72,17 @@ function singupButtonPressed() {
             telefono: user.telefono,
             password: user.password
         }
-    ).then(response => {
+    ).catch(err => {
 
-        console.log(response)
-
-        const { HTTPCode, success, message } = response.data.payload;
-
-    }).catch(err => {
         const { message } = err.response.data;
         responseError = message
+        
     })
+    if (response){
+        toSubmit.value = true;
+        console.log(response)
+        const { HTTPCode, success, message } = response.data.payload;
+    }
 
 }
 const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
